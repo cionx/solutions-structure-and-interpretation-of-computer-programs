@@ -15,17 +15,17 @@
 
 Simpson’s rule can also be written as follows:
 $$
-    \begin{aligned}
-    {}&
-    \frac{h}{3}
-    (y_0 + 4 y_1 + 2 y_2 + 4 y_3 + 2 y_4 + \dotsb + 2 y_{n-2} + 4 y_{n-1} + y_n) \\
-    ={}&
-    \frac{h}{3}
-    \biggl( y_0 + ∑_{k = 1}^{n / 2} (4 y_{2k - 1} + 2 y_{2k}) - y_n \biggr) \\
-    ={}&
-    \frac{h}{3}
-    \left( f(a) + ∑_{k = 1}^{n / 2} (4 y_{2k - 1} + 2 y_{2k}) - f(b) \right) \,.
-    \end{aligned}
+  \begin{aligned}
+  {}&
+  \frac{h}{3}
+  (y_0 + 4 y_1 + 2 y_2 + 4 y_3 + 2 y_4 + \dotsb + 2 y_{n-2} + 4 y_{n-1} + y_n) \\
+  ={}&
+  \frac{h}{3}
+  \biggl( y_0 + ∑_{k = 1}^{n / 2} (4 y_{2k - 1} + 2 y_{2k}) - y_n \biggr) \\
+  ={}&
+  \frac{h}{3}
+  \left( f(a) + ∑_{k = 1}^{n / 2} (4 y_{2k - 1} + 2 y_{2k}) - f(b) \right) \,.
+  \end{aligned}
 $$
 This form of Simpson’s rule suggests the following implementation:
 ```scheme

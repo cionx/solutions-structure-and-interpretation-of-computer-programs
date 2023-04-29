@@ -31,6 +31,7 @@ The interpreter will now be stuck in a loop, forever trying to evaluate `(p)` (t
 
 
 ### Normal-order evaluation
+
 To evaluate the expression
 ```scheme
   (test 0 (p))

@@ -1,3 +1,6 @@
+(define (square x)
+  (* x x))
+
 (define (prime? n)
   (= n (smallest-divisor n)))
 

@@ -37,10 +37,6 @@
 (define (divides? a b)
   (= (remainder b a) 0))
 
-(define (square x) (* x x))
-
-(define (inc x) (+ 1 x))
-
 
 
 (define (sum-prime-squares a b)
@@ -50,3 +46,11 @@
   (define (id x) x)
   (define (coprime? a) (= 1 (gcd a n)))
   (filter-product coprime? id 2 inc n))
+
+
+
+(define (square x)
+  (* x x))
+
+(define (inc x)
+  (+ 1 x))

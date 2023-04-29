@@ -7,10 +7,12 @@
 (define (dec n)
   (- n 1))
 
+
+
 (define (even? n)
   (= n (double (halve n))))
 
-; The expression s + a * b is invariant.
+;; The expression s + a * b is invariant.
 (define (*-fast-iter s a b)
   (cond ((= b 0) s)
         ((even? b)

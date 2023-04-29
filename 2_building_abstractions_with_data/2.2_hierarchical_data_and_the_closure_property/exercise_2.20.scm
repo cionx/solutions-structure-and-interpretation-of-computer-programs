@@ -8,5 +8,7 @@
             (if (correct-parity? head)
                 (cons head rest)
                 rest)))))
-  (cons x (iter (if (even? x) even? odd?)
+  (cons x (iter (if (even? x)
+                    even?
+                    odd?)
                 items)))

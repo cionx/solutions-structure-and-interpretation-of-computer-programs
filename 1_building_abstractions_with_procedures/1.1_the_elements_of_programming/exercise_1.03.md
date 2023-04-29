@@ -6,7 +6,8 @@
 
 We can use the following code:
 ```scheme
-(define (square x) (* x x))
+(define (square x)
+  (* x x))
 
 (define (sum-of-squares x y)
   (+ (square x)

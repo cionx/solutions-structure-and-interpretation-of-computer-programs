@@ -7,7 +7,9 @@
 
 (define (f-iterative-iter a b c counter)
   (define (next a b c)
-    (+ a (* 2 b) (* 3 c)))
+    (+ a
+       (* 2 b)
+       (* 3 c)))
   (if (<= counter 0)
       a
       (f-iterative-iter (next a b c) a b (- counter 1))))

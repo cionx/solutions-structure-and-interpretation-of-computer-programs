@@ -1,17 +1,5 @@
-# Exercise 1.20
+;; applicative-order evaluation
 
-> The process that a procedure generates is of course dependent on the rules used by the interpreter.
-> As an example, consider the iterative `gcd` procedure given above.
-> Suppose we were to interpret this procedure using normal-order evaluation, as discussed in Section~1.1.5.
-> (The normal-order-evaluation rule for `if` is described in Exercise 1.5.)
-> Using the substitution method (for normal order), illustrate the process generated in evaluating `(gcd 206 40)` and indicate the `remainder` operations that are actually performed.
-> How many `remainder` operations are actually performed in the normal-order evaluation of `(gcd 206 40)`?
-> In the applicative-order evaluation?
-
-
-
-With applicative-order evaluation:
-```scheme
 (gcd 206 40)
 
 (if (= 40 0) 206 (gcd 40 (remainder 206 40)))
@@ -47,11 +35,11 @@ With applicative-order evaluation:
 (gcd 2 0)
 
 2
-```
-We have performed the `remainder` operation a total of four times.
 
-With normal-order evaluation:
-```scheme
+
+
+;; normal-order evaluation
+
 (gcd 206 40)
 
 
@@ -480,5 +468,3 @@ With normal-order evaluation:
                                                                                 # 18
 
 2
-```
-This time, 18 `remainder` operations are performed.

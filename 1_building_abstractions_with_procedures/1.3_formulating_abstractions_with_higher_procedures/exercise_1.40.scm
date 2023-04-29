@@ -5,12 +5,6 @@
        (* b x)
        c)))
 
-(define (cube x)
-  (* x x x))
-
-(define (square x)
-  (* x x))
-
 
 
 (define (solve-cubic a b c)
@@ -41,3 +35,11 @@
   (lambda (x) (/ (- (g (+ x dx)) (g x)) dx)))
 
 (define dx 0.00001)
+
+
+
+(define (cube x)
+  (* x x x))
+
+(define (square x)
+  (* x x))

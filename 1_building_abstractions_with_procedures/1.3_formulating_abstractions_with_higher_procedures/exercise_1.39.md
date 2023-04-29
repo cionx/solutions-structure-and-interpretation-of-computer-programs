@@ -20,6 +20,4 @@ We can implement the desired procedure as follows:
   (define (d i)
     (- (* 2 i) 1))
   (cont-frac n d k))
-
-(define (square x) (* x x))
 ```

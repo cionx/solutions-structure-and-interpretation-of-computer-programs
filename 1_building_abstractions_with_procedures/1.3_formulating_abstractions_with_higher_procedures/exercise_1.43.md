@@ -25,5 +25,5 @@ We can use the following code:
       (compose f (repeated f (- n 1)))))
 ```
 
-We thougt about using the same approach as in `expt-fast` to decrease the recursion depth of `repeat`.
+We thought about using the same approach as in `expt-fast` to decrease the recursion depth of `repeat`.
 But it seems to us that, in the end, `(repeat f n)` will always be expended to expressions of the same size (since there is probably no internal simplification of `(compose f g)`).

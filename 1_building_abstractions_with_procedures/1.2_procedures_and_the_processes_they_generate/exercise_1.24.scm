@@ -1,4 +1,4 @@
-; From the previous text.
+;;; Often used background code.
 
 (define (expmod base exp m)
   (cond ((= exp 0) 1)
@@ -19,7 +19,10 @@
         ((fermat-test n) (fast-prime? n (- times 1)))
         (else false)))
 
-; From the exercise.
+
+
+;;; Code given by the exercise, with the modification
+;;; to start-prime-test that the exercise asks for.
 
 (define (timed-prime-test n)
   (newline)
@@ -34,7 +37,9 @@
   (display " *** ")
   (display elapsed-time))
 
-; for testing sequences of numbers
+
+
+; For testing sequences of numbers.
 
 (define (smallest-primes n count)
   (if (> count 0)

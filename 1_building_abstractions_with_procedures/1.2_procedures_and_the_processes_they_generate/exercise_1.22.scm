@@ -1,4 +1,7 @@
-; From the previous text.
+;;; Previous stuff.
+
+(define (square x)
+  (* x x))
 
 (define (smallest-divisor n)
   (find-divisor n 2))
@@ -14,7 +17,9 @@
 (define (prime? n)
   (= n (smallest-divisor n)))
 
-; From the exercise.
+
+
+;;; Given code from the exercise.
 
 (define (timed-prime-test n)
   (newline)
@@ -29,7 +34,9 @@
   (display " *** ")
   (display elapsed-time))
 
-; for testing sequences of numbers
+
+
+;;; For testing sequences of numbers.
 
 (define (smallest-primes n count)
   (if (> count 0)

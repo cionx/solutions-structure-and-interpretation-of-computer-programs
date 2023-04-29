@@ -1,3 +1,6 @@
+(define (square x)
+  (* x x))
+
 (define (expmod-old base exp m)
   (cond ((= exp 0) 1)
         ((even? exp)
@@ -14,6 +17,3 @@
   (cond ((= n 0) 1)
         ((even? n) (square (fast-expt b (/ n 2))))
         (else (* b (fast-expt b (- n 1))))))
-
-(define (square x) (* x x))
-

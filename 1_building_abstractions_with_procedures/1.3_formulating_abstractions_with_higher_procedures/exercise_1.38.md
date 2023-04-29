@@ -12,8 +12,8 @@ We can use the following procedure(s):
   (define (n i) 1.0)
   (define (d i)
     (if (= 2 (remainder i 3))
-      (* 2 (+ 1 (quotient i 3)))
-      1.0))
+        (* 2 (+ 1 (quotient i 3)))
+        1.0))
   (cont-frac n d k))
 
 (define (e-approx k)

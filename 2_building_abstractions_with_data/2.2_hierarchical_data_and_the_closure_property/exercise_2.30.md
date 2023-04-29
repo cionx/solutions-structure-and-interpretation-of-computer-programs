@@ -20,7 +20,7 @@ A direct implementation is as follows:
         ((list? tree)
          (cons (square-tree (car tree))
                (square-tree (cdr tree))))
-         (else (square tree))))
+        (else (square tree))))
 ```
 
 The following is an implementation using `map` and recursion:

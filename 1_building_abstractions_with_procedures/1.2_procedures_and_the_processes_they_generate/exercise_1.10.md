@@ -10,11 +10,11 @@
 > ```
 > What are the values of the following expressions?
 > ```scheme
->   (A 1 10)
+> (A 1 10)
 >
->   (A 2 4)
+> (A 2 4)
 >
->   (A 3 3)
+> (A 3 3)
 > ```
 > Consider the following procedures, where `A` is the procedure defined above:
 > ```scheme
@@ -38,8 +38,6 @@ We consider also the procedure `i` defined as follows:
 
 In the following, we denote for every integer $n$ its primitive Scheme value by $[n]$.
 So, for example, `[5]` is `5`, and `[2^3 + 2]` is `10`.
-
-
 
 
 

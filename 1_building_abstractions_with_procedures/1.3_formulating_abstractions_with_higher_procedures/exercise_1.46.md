@@ -14,8 +14,8 @@ We can implement the described procedure `iterative-improve` as follows:
 (define (iterative-improve good-enough? improve)
   (define (iter guess)
     (if (good-enough? guess)
-      guess
-      (iter (improve guess))))
+        guess
+        (iter (improve guess))))
   iter)
 ```
 

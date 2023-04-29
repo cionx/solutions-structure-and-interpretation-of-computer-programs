@@ -1,8 +1,8 @@
 (define (iterative-improve good-enough? improve)
   (define (iter guess)
     (if (good-enough? guess)
-      guess
-      (iter (improve guess))))
+        guess
+        (iter (improve guess))))
   iter)
 
 
@@ -14,11 +14,6 @@
     (average y (/ x y)))
   ((iterative-improve good-enough? improve) 1.0))
 
-(define (square x) (* x x))
-
-(define (average x y)
-  (/ (+ x y) 2))
-
 
 
 (define (fixed-point f first-guess)
@@ -27,3 +22,10 @@
   (define (good-enough? guess)
     (close-enough? guess (f guess)))
   ((iterative-improve good-enough? f) first-guess))
+
+
+
+(define (square x) (* x x))
+
+(define (average x y)
+  (/ (+ x y) 2))

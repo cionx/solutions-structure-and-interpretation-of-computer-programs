@@ -1,4 +1,4 @@
-; points
+; Points
 
 (define (make-point x y)
   (cons x y))
@@ -9,7 +9,7 @@
 (define (y-point p)
   (cdr p))
 
-; rectangles, first representation
+; Rectangles, first representation
 
 (define (make-rect point width height)
   (cons point
@@ -21,7 +21,7 @@
 (define (height r)
   (cdr (cdr r)))
 
-; rectangles, second representation
+; Rectangles, second representation
 
 (define (make-rect bl tr)
   (cons bl tr))
@@ -42,7 +42,7 @@
         (tr (tr-rect r)))
     (- (y-point tr) (y-point bl))))
 
-; perimeter and area, representation-independent
+; Perimeter and area, representation-independent
 
 (define (perimeter r)
   (+ (* 2 (height r))

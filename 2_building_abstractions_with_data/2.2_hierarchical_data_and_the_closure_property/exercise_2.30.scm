@@ -3,7 +3,7 @@
         ((list? tree)
          (cons (square-tree (car tree))
                (square-tree (cdr tree))))
-         (else (square tree))))
+        (else (square tree))))
 
 (define (square-tree tree)
   (if (list? tree)
@@ -14,3 +14,8 @@
   (list 1
         (list 2 (list 3 4) 5)
         (list 6 7)))
+
+
+
+(define (square x)
+  (* x x))

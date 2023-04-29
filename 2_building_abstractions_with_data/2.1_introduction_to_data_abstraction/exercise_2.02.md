@@ -22,7 +22,7 @@
 
 We use the following code:
 ```scheme
-; points
+;;; Points
 
 (define (make-point x y)
   (cons x y))
@@ -33,7 +33,7 @@ We use the following code:
 (define (y-point p)
   (cdr p))
 
-; lines
+;;; Lines
 
 (define (make-segment p q)
   (cons p q))
@@ -44,7 +44,7 @@ We use the following code:
 (define (end-segment s)
   (cdr s))
 
-; midpoint
+;;; Midpoint
 
 (define (midpoint-segment s)
   (define (average x y)

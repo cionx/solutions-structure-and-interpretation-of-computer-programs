@@ -1,4 +1,7 @@
-; copied from the book
+;;; Copied from the text.
+
+(define (square x)
+  (* x x))
 
 (define (prime? n)
   (= n (smallest-divisor n)))
@@ -25,17 +28,17 @@
          (remainder (* base (expmod base (- exp 1) m))
                     m))))
 
-; written myself
+;;; Self-written.
 
 (define (find-carmichael limit)
   (find-carmichael-iter 1 limit))
 
 (define (find-carmichael-iter n limit)
   (when (carmichael? n)
-        (display n)
-        (newline))
+    (display n)
+    (newline))
   (when (<= n limit)
-        (find-carmichael-iter (+ n 1) limit)))
+    (find-carmichael-iter (+ n 1) limit)))
 
 (define (carmichael? n)
   (and (maybe-prime? n)

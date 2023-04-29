@@ -1,4 +1,4 @@
-; points
+;;; Points
 
 (define (make-point x y)
   (cons x y))
@@ -9,7 +9,7 @@
 (define (y-point p)
   (cdr p))
 
-; lines
+;;; Lines
 
 (define (make-segment p q)
   (cons p q))
@@ -20,7 +20,7 @@
 (define (end-segment s)
   (cdr s))
 
-; midpoint
+;;; Midpoint
 
 (define (midpoint-segment s)
   (define (average x y)

@@ -18,4 +18,7 @@
     (- (* 2 i) 1))
   (cont-frac n d k))
 
-(define (square x) (* x x))
+
+
+(define (square x)
+  (* x x))

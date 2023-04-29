@@ -1,7 +1,8 @@
 (define (even? n)
   (= (remainder n 2) 0))
 
-(define (square x) (* x x))
+(define (square x)
+  (* x x))
 
 (define (fast-expt-iter a b n)
   (cond ((= n 0) a)

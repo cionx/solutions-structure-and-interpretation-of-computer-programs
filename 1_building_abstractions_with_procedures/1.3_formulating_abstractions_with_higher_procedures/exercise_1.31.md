@@ -5,9 +5,9 @@
 >     Show how to define `factorial` in terms of `product`.
 >     Also use `product` to compute approximations to $π$ using the formula
 >     $$
->         \frac{π}{4}
->         =
->         \frac{2 ⋅ 4 ⋅ 4 ⋅ 6 ⋅ 6 ⋅ 8 \dotsm}{3 ⋅ 3 ⋅ 5 ⋅ 5 ⋅ 7 ⋅ 7 \dotsm} \,.
+>       \frac{π}{4}
+>       =
+>       \frac{2 ⋅ 4 ⋅ 4 ⋅ 6 ⋅ 6 ⋅ 8 \dotsm}{3 ⋅ 3 ⋅ 5 ⋅ 5 ⋅ 7 ⋅ 7 \dotsm} \,.
 >     $$
 >
 >
@@ -37,11 +37,11 @@ We can then implement `factorial` as follows:
 
 For the approximation of $π$, we arrange the given formula as
 $$
-    \frac{π}{4}
-    =
-    \frac{2 ⋅ 4 ⋅ 4 ⋅ 6 ⋅ 6 ⋅ 8 \dotsm}{3 ⋅ 3 ⋅ 5 ⋅ 5 ⋅ 7 ⋅ 7 \dotsm}
-    =
-    \frac{2 ⋅ 4}{3 ⋅ 3}\, ⋅ \,\frac{4 ⋅ 6}{5 ⋅ 5}\, ⋅ \,\frac{6 ⋅ 8}{7 ⋅ 7} \dotsm
+  \frac{π}{4}
+  =
+  \frac{2 ⋅ 4 ⋅ 4 ⋅ 6 ⋅ 6 ⋅ 8 \dotsm}{3 ⋅ 3 ⋅ 5 ⋅ 5 ⋅ 7 ⋅ 7 \dotsm}
+  =
+  \frac{2 ⋅ 4}{3 ⋅ 3}\, ⋅ \,\frac{4 ⋅ 6}{5 ⋅ 5}\, ⋅ \,\frac{6 ⋅ 8}{7 ⋅ 7} \dotsm
 $$
 This rearrangement leads to the following procedure:
 ```scheme

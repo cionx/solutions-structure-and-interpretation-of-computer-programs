@@ -3,10 +3,10 @@
 
 (define (find-primes-iter test limit)
   (when (<= test limit)
-        (when (fast-prime? test 100)
-              (display test)
-              (newline))
-        (find-primes-iter (+ 1 test) limit)))
+    (when (fast-prime? test 100)
+      (display test)
+      (newline))
+    (find-primes-iter (+ 1 test) limit)))
 
 (define (fast-prime? n times)
   (cond ((= times 0) true)
@@ -36,4 +36,7 @@
       0
       result))
 
-(define (square x) (* x x))
+
+
+(define (square x)
+  (* x x))
