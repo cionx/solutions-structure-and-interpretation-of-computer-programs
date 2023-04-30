@@ -146,18 +146,18 @@ We modify the procedure `queen-cols` from Exercise 2.42 to compute the values $
       (list (list empty-board))
       (let ((earlier-results (queen-cols n (- k 1))))
         (cons
-          (filter
-            (lambda (positions)
-              (safe? k positions))
-            (flatmap
-              (lambda (rest-of-queens)
-                (map (lambda (new-row)
-                       (adjoin-position new-row
-                                        k
-                                        rest-of-queens))
-                     (enumerate-interval 1 n)))
-              (car earlier-results)))
-          earlier-results))))
+         (filter
+          (lambda (positions)
+            (safe? k positions))
+          (flatmap
+           (lambda (rest-of-queens)
+             (map (lambda (new-row)
+                    (adjoin-position new-row
+                                     k
+                                     rest-of-queens))
+                  (enumerate-interval 1 n)))
+           (car earlier-results)))
+         earlier-results))))
 ```
 We can then compute $R(n)$ as follows:
 ```scheme
@@ -191,9 +191,8 @@ To measure the _actual_ run times of both the original `queens` and Louis’s ve
 (define (time loop-number f x)
   (define (iter remaining start-time)
     (if (> remaining 0)
-        (begin
-          (f x)
-          (iter (- remaining 1) start-time))
+        (begin (f x)
+               (iter (- remaining 1) start-time))
         (- (runtime) start-time)))
   (/ (iter loop-number (runtime))
      loop-number))

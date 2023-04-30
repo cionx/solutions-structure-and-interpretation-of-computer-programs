@@ -65,18 +65,18 @@
       (list (list empty-board))
       (let ((earlier-results (queen-cols n (- k 1))))
         (cons
-          (filter
-            (lambda (positions)
-              (safe? k positions))
-            (flatmap
-              (lambda (rest-of-queens)
-                (map (lambda (new-row)
-                       (adjoin-position new-row
-                                        k
-                                        rest-of-queens))
-                     (enumerate-interval 1 n)))
-              (car earlier-results)))
-          earlier-results))))
+         (filter
+          (lambda (positions)
+            (safe? k positions))
+          (flatmap
+           (lambda (rest-of-queens)
+             (map (lambda (new-row)
+                    (adjoin-position new-row
+                                     k
+                                     rest-of-queens))
+                  (enumerate-interval 1 n)))
+           (car earlier-results)))
+         earlier-results))))
 
 (define (q-values n)
   (reverse (map length (queen-cols n (- n 1)))))

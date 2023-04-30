@@ -34,12 +34,10 @@ We write an auxiliary function to run multiple instances of `timed-prime-test` i
 ```scheme
 (define (smallest-primes n count)
   (if (> count 0)
-      (begin
-        (timed-prime-test n)
-        (smallest-primes (+ n 1) (- count 1)))
-      (begin
-        (newline)
-        (display "*** end ***"))))
+      (begin (timed-prime-test n)
+             (smallest-primes (+ n 1) (- count 1)))
+      (begin (newline)
+             (display "*** end ***"))))
 ```
 We use the not-yet-introduced construction `(begin …)` to group together multiple expressions.
 
