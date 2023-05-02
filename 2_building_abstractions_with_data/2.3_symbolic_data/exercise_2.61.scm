@@ -1,0 +1,7 @@
+(define (adjoin-set x set)
+  (if (null? set)
+      (list x)
+      (let ((y (car set)))
+        (cond ((< x y) (cons x set))
+              ((= x y) set)
+              (else (cons y (adjoin-set x (cdr set))))))))
