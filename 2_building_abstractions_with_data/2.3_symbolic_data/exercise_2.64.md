@@ -51,92 +51,92 @@ This is why we need to `car` and `cdr` the output of `partial-tree` to access th
 
 The value of `(list->tree (1 3 5 7 9 11))` can be determined as follows (even though this is not the order in which `partial-tree` does these calculations):
 ```text
-(1 3 5 7 9 11)
+        *
+  (1 3 5 7 9 11)
 
 
-      5
+        5
+       / \
+(1 3) *   * (7 9 11)
+
+
+        5
+       / \
+      1   * (7 9 11)
      / \
-(1 3)   (7 9 11)
+'() *   * (3)
 
 
-      5
-     / \
-    1   (7 9 11)
-   / \
-'()   (3)
+        5
+       / \
+      1   (7 9 11)
+       \
+        * (3)
 
 
-  5
- / \
-1   (7 9 11)
- \
-  (3)
+        5
+       / \
+      1   * (7 9 11)
+       \
+        3
+       / \
+  '() *   * '()
 
 
-    5
-   / \
-  1   (7 9 11)
-   \
-    3
-   / \
-'()   '()
+        5
+       / \
+      1   * (7 9 11)
+       \
+        3
 
 
-  5
- / \
-1   (7 9 11)
- \
-  3
+        5
+       / \
+      /   \
+     /     \
+    1       9
+     \     / \
+      3   *   * (11)
+         (7)
 
 
-     5
-    / \
-   /   \
-  /     \
- /       \
-1         9
- \       / \
-  3   (7)  (11)
+        5
+       / \
+      /   \
+     /     \
+    1       9
+     \     / \
+      3   7   * (11)
+         / \
+    '() *   * '()
+
+        5
+       / \
+      /   \
+     /     \
+    1       9
+     \     / \
+      3   7   * (11)
 
 
-    5
-   / \
-  /   \
- /     \
-1       9
- \     / \
-  3   7   (11)
-     / \
-  '()   '()
+        5
+       / \
+      /   \
+     /     \
+    1       9
+     \     / \
+      3   7   11
+             /  \
+        '() *    * '()
 
 
-    5
-   / \
-  /   \
- /     \
-1       9
- \     / \
-  3   7   (11)
-
-
-    5
-   / \
-  /   \
- /     \
-1       9
- \     / \
-  3   7   11
-         /  \
-      '()    '()
-
-
-    5
-   / \
-  /   \
- /     \
-1       9
- \     / \
-  3   7   11
+        5
+       / \
+      /   \
+     /     \
+    1       9
+     \     / \
+      3   7   11
 ```
 
 It should be noted that the procedure `list->tree` simply arranges the items of its input in a balanced binary tree.
