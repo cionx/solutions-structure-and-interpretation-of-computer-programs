@@ -1,70 +1,6 @@
-(define (attach-tag type-tag contents)
-  (cons type-tag contents))
+(load "../../sicplib.scm")
 
-(define (type-tag datum)
-  (if (pair? datum)
-      (car datum)
-      (error "Bad tagged datum: TYPE-TAG" datum)))
-
-(define (contents datum)
-  (if (pair? datum)
-      (cdr datum)
-      (error "Bad tagged datum: CONTENTS" datum)))
-
-(define (rectangular? z)
-  (eq? (type-tag z) 'rectangular))
-
-(define (polar? z)
-  (eq? (type-tag z) 'polar))
-
-(define (assoc key records)
-  (cond ((null? records) false)
-        ((equal? key (caar records)) (car records))
-        (else (assoc key (cdr records)))))
-
-(define (make-table)
-  (let ((local-table (list '*table*)))
-    (define (lookup key-1 key-2)
-      (let ((subtable
-             (assoc key-1 (cdr local-table))))
-        (if subtable
-            (let ((record
-                   (assoc key-2 (cdr subtable))))
-              (if record (cdr record) false))
-            false)))
-    (define (insert! key-1 key-2 value)
-      (let ((subtable
-             (assoc key-1 (cdr local-table))))
-        (if subtable
-            (let ((record
-                   (assoc key-2 (cdr subtable))))
-              (if record
-                  (set-cdr! record value)
-                  (set-cdr! subtable
-                            (cons (cons key-2 value)
-                                  (cdr subtable)))))
-            (set-cdr! local-table
-                      (cons (list key-1 (cons key-2 value))
-                            (cdr local-table)))))
-      'ok)
-    (define (dispatch m)
-      (cond ((eq? m 'lookup-proc) lookup)
-            ((eq? m 'insert-proc!) insert!)
-            (else (error "Unknown operation: TABLE" m))))
-    dispatch))
-
-(define operation-table (make-table))
-(define get (operation-table 'lookup-proc))
-(define put (operation-table 'insert-proc!))
-
-(define (apply-generic op . args)
-  (let ((type-tags (map type-tag args)))
-    (let ((proc (get op type-tags)))
-      (if proc
-          (apply proc (map contents args))
-          (error
-            "No method for these types: APPLY-GENERIC"
-            (list op type-tags))))))
+(define (=zero? x) (apply-generic 'zero? x))    ; new code
 
 (define (install-rectangular-package)
   ;; internal procedures
@@ -84,9 +20,9 @@
   (put 'imag-part '(rectangular) imag-part)
   (put 'magnitude '(rectangular) magnitude)
   (put 'angle '(rectangular) angle)
-  (put 'zero? '(rectangular)                      ; new code
-       (lambda (z) (and (= (real-part z) 0)       ;
-                        (= (imag-part z) 0))))    ;
+  (put 'zero? '(rectangular)                            ; new code
+       (lambda (z) (and (= (real-part z) 0)             ;
+                        (= (imag-part z) 0))))          ;
   (put 'make-from-real-imag 'rectangular
        (lambda (x y) (tag (make-from-real-imag x y))))
   (put 'make-from-mag-ang 'rectangular
@@ -109,25 +45,13 @@
   (put 'imag-part '(polar) imag-part)
   (put 'magnitude '(polar) magnitude)
   (put 'angle '(polar) angle)
-  (put 'zero? '(polar)                      ; new code
-       (lambda (z) (= (magnitude z) 0)))    ;
+  (put 'zero? '(polar)                                  ; new code
+       (lambda (z) (= (magnitude z) 0)))                ;
   (put 'make-from-real-imag 'polar
        (lambda (x y) (tag (make-from-real-imag x y))))
   (put 'make-from-mag-ang 'polar
        (lambda (r a) (tag (make-from-mag-ang r a))))
   'done)
-
-(define (real-part z) (apply-generic 'real-part z))
-(define (imag-part z) (apply-generic 'imag-part z))
-(define (magnitude z) (apply-generic 'magnitude z))
-(define (angle z) (apply-generic 'angle z))
-
-;;; Section 2.5: Systems with generic operations
-
-(define (add x y) (apply-generic 'add x y))
-(define (sub x y) (apply-generic 'sub x y))
-(define (mul x y) (apply-generic 'mul x y))
-(define (div x y) (apply-generic 'div x y))
 
 (define (install-scheme-number-package)
   (define (tag x)
@@ -151,9 +75,6 @@
        'scheme-number
        (lambda (x) (tag x)))
   'done)
-
-(define (make-scheme-number n)
-  ((get 'make 'scheme-number) n))
 
 (define (install-rational-package)
   ;; internal procedures
@@ -190,21 +111,13 @@
   (put 'div
        '(rational rational)
        (lambda (x y) (tag (div-rat x y))))
-  (put 'zero?                           ; new code
-       '(rational)                      ;
-       (lambda (x) (= (numer x) 0)))    ;
+  (put 'zero?                               ; new code
+       '(rational)                          ;
+       (lambda (x) (= (numer x) 0)))        ;
   (put 'make
        'rational
        (lambda (n d) (tag (make-rat n d))))
   'done)
-
-(define (make-rational n d)
-  ((get 'make 'rational) n d))
-
-(put 'real-part '(complex) real-part)
-(put 'imag-part '(complex) imag-part)
-(put 'magnitude '(complex) magnitude)
-(put 'angle '(complex) angle)
 
 (define (install-complex-package)
   ;; imported procedures from rectangular and polar packages
@@ -250,13 +163,9 @@
        (lambda (r a) (tag (make-from-mag-ang r a))))
   'done)
 
-(define (make-complex-from-real-imag x y)
-  ((get 'make-from-real-imag 'complex) x y))
 
-(define (make-complex-from-mag-ang r a)
-  ((get 'make-from-mag-ang 'complex) r a))
 
-(define (=zero? x) (apply-generic 'zero? x))    ; new code
+;;; For testing
 
 (install-scheme-number-package)
 (install-rational-package)
