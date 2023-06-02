@@ -535,7 +535,11 @@
 (put 'magnitude '(complex) magnitude)
 (put 'angle '(complex) angle)
 
-
+(install-scheme-number-package)
+(install-rational-package)
+(install-polar-package)
+(install-rectangular-package)
+(install-complex-package)
 
 ;;; 2.5.2: Combining data of different types
 
@@ -548,6 +552,8 @@
 
 (put-coercion 'scheme-number 'complex scheme-number->complex)
 
+;; Important: apply-generic applies the found procedure directly to the contents
+;; of the arguments: the type labels of the input are stripped off!
 (define (apply-generic op . args)
   (let ((type-tags (map type-tag args)))
     (let ((proc (get op type-tags)))
