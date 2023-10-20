@@ -1,13 +1,22 @@
+;;; 1.1.4 Compound Procedures
+
 (define (square x)
   (* x x))
 
-(define (cube x)
-  (* x x x))
+
+
+;;; 1.1.7 Example: Square Roots by Newton’s Method
 
 (define (average x y)
   (/ (+ x y) 2))
 
+
+
+(define (cube x)
+  (* x x x))
+
 (define (identity x) x)
+
 
 
 (define (prime? n)

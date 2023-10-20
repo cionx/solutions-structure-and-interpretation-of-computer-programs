@@ -8,7 +8,7 @@
 > Design a square-root procedure that uses this kind of end test.
 > Does this work better for small and large numbers?
 
-
+---
 
 ### Small numbers
 
@@ -30,9 +30,9 @@ For small numbers, this can lead `sqrt` to give results that are far too large.
 | 1e-10 | 0.03125000106562499 |
 
 
-We can see that at some point, the output of `sqrt x` stays nearly the same; more precisely, the output of `(sqrt 10e-n)` seems to be roughly
+We can see that at some point, the output of `sqrt x` stays nearly the same; more precisely, if $x$ equals $10^{-n}$, then the output seemss to be roughly
 $$
-  0.03125 + 1.0656 \mathrm{e}^{-(n-1)} \,.
+  0.03125 + 1.0656 ⋅ 10^{-(n-1)} \,.
 $$
 It thus seems to reckon that for $x$ small enough, the output of `(sqrt x)` should be roughly
 $$
@@ -55,7 +55,7 @@ $$
   f_x^{n_x}(1)
   \,,
 $$
-where $n_x$ is the number of iterations, which depends on $x$, and $1$ is the starting guess.
+where $n_x$ is the number of iterations, which depends on $x$, and where $1$ is the starting guess.
 The number $n_x$ has the property
 $$
   | f_x^{n_x}(1)^2 - x | < 0.001,
@@ -78,22 +78,27 @@ $$
   \iff
   m ≥ 5 \,.
 $$
-The number of iterations $n_0$ is therefore $5$.
+The number of iterations $n_0$ is therefore $5$, i.e., $n_0 = 5$.
 We also note that
 $$
   |f_0^4(1)^2 - 0| = \frac{1}{2^{2 ⋅ 4}} = \frac{1}{2^8} = \frac{1}{256}
 $$
 is _strictly_ larger than $0.001$.
 
-We can see from the explicit formula for $f_x$ and by induction that the $m$-th guess $f_x^m(1)$ is a rational function in $x$, for every $m ≥ 0$.
-Consequently, $f_x^m(1)$ is continuous in $x$ (smooth, even).
-Consequently, the $m$-th error function $e_m(x) ≔ |f_x^m(1)^2 - x|$ is continuous in $x$, for every $m ≥ 0$.
-We already know that $e_4(0) > 0.001$ and $e_5(0) < 0.001$.
-So by continuity of $e_4$ and $e_5$, there exists some (possibly rather small) radius $δ > 0$ such that $e_4(x) > 0.001$ and $e_5(x) < 0.001$ for every $x$ in $[0, δ)$.
-This tells us that
-$$
-  n_x = 5 \qquad \text{for every $x ∈ [0, δ)$} \,.
-$$
+We claim that $n_x = 5$ whenever $x$ is sufficiently small.
+That is, the number of iterations $n_x$ is the same for all sufficiently small $x$.
+
+> _Proof of the claim._
+> We can see from the explicit formula for $f_x$ and by induction that the $m$-th guess $f_x^m(1)$ is a rational function in $x$, for every $m ≥ 0$.
+> Consequently, $f_x^m(1)$ is continuous in $x$ (smooth, even).
+> Consequently, the $m$-th error function $e_m(x) ≔ |f_x^m(1)^2 - x|$ is continuous in $x$, for every $m ≥ 0$.
+> We already know that $e_4(0) > 0.001$ and $e_5(0) < 0.001$.
+> So by continuity of $e_4$ and $e_5$, there exists some (possibly rather small) radius $δ > 0$ such that $e_4(x) > 0.001$ and $e_5(x) < 0.001$ for every $x$ in $[0, δ)$.
+> This tells us that
+> $$
+>   n_x = 5 \qquad \text{for every $x ∈ [0, δ)$} \,.
+> $$
+
 The value of `(sqrt x)` is therefore (up to the limitations of machine arithmetic) given by
 $$
   f_x^5(1)
@@ -110,7 +115,7 @@ $$
 $$
 for sufficiently small $x$.
 The value $s(0)$ is $f_0^5(1) = 1 / 2^5 = 1 / 32$.
-We don’t know how to compute $s'(0)$ is a smart way, so we will enlist the help of the computer.
+We don’t know how to compute $s'(0)$ in a smart way, so we will enlist the help of the computer.
 More precisely, we will use Sympy:
 ```python
 from sympy import Symbol, simplify
@@ -159,6 +164,8 @@ $$
 \end{aligned}
 $$
 
+Overall, the value of `(sqrt x)` is precisely $a(x) / b(x)$ for sufficiently small $x$, up to the errors of machine arithmetic.
+
 
 
 ### Large numbers
@@ -168,7 +175,7 @@ More precisely, the procedure `good-enough?` becomes unreliable once its argumen
 
 For the evaluation of `(good-enough? guess x)` we compute the difference `(- (square guess) x)`.
 But machine arithmetic has only limited precision.
-In particular, subtraction of two large numbers of the same order of magnitude can have a noticeable margin of error, relative to what the mathematically correct result would be.
+In particular, subtraction of two large numbers of the same order of magnitude can have a noticeable margin of error, relative to the mathematically correct result.
 This can lead to two potential problems:
 
 - The difference `(- (square guess) x)` is smaller than it should be (in terms of its absolute value), leading to `(good-enough? guess x)` passing prematurely.
@@ -185,35 +192,36 @@ This is, for example, the case if we choose `x` as `1e46` (or larger).
 
 ### Alternative implementation
 
-For better results, we can use the following code:
+For better results, we can use a different implementation for `good-enough?`:
 ```scheme
-(define (improve guess x)
-  (average guess (/ x guess)))
-
-(define (average x y)
-  (/ (+ x y) 2))
-
 (define (small-percentage? x y)
   (< (abs x)
      (* 0.0001 (abs y))))
 
 (define (good-enough? oldguess newguess)
   (small-percentage? (- oldguess newguess) oldguess))
+```
 
-(define (sqrt-iter-1 guess x)
-  (sqrt-iter-2 guess
-               (improve guess x)
-               x))
+We split the procedure `sqrt-iter` into two parts:
+The first part takes the arguments `guess` and `x` and produces a new guess.
+The second part then takes the three arguments `oldguess`, `newguess` and `x` and determines what to do next.
+The two parts will recursively call one another.
 
-(define (sqrt-iter-2 oldguess newguess x)
+```scheme
+(define (sqrt-iter-start guess x)
+  (sqrt-iter-cmp guess
+                 (improve guess x)
+                 x))
+
+(define (sqrt-iter-cmp oldguess newguess x)
   (if (good-enough? oldguess newguess)
       newguess
-      (sqrt-iter-1 newguess x)))
+      (sqrt-iter-start newguess x)))
 
 (define (sqrt x)
-  (sqrt-iter-1 1.0 x))
+  (sqrt-iter-start 1.0 x))
 ```
-Indeed, with this procedures, we get the following results:
+With this new implementation, we get the following results:
 
 | `x`    | `(sqrt x)`              |
 |:-------|:------------------------|
@@ -254,10 +262,10 @@ $$
 $$
 We can circumvent this problem by checking for the very specific input of `0.`.
 It is then also a good idea to check for the special input $+∞$, which in scheme is denoted as `+inf.0`.
-This leads to the following extended definition of `sqrt`:
+We arrive at the following extended definition of `sqrt`:
 ```scheme
 (define (sqrt x)
-  (cond ((= x 0.) 0.)
+  (cond ((= x 0) 0)
         ((= x +inf.0) +inf.0)
         (else (sqrt-iter-1 1.0 x))))
 ```

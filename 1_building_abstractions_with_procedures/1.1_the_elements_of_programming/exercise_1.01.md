@@ -38,20 +38,22 @@
 >    (+ a 1))
 > ```
 
+---
 
-
-The responses can be found in the respective last lines.
-We determine them with applicative-order evaluation.
+We determine the results with applicative-order evaluation.
+The results can be found in the respective last lines.
 
 
 
 ### First expression
+
 ```scheme
 10
 ```
 
 
 ### Second expression
+
 ```scheme
 (+ 5 3 4)
 
@@ -63,6 +65,7 @@ We determine them with applicative-order evaluation.
 
 
 ### Third expression
+
 ```scheme
 (- 9 1)
 
@@ -72,6 +75,7 @@ We determine them with applicative-order evaluation.
 
 
 ### Fourth expression
+
 ```scheme
 (/ 6 2)
 
@@ -81,6 +85,7 @@ We determine them with applicative-order evaluation.
 
 
 ### Fifth expression
+
 ```scheme
 (+ (* 2 4) (- 4 6))
 
@@ -94,6 +99,7 @@ We determine them with applicative-order evaluation.
 
 
 ### Sixth expression
+
 ```scheme
 (define a 3)
 
@@ -104,6 +110,7 @@ From now on, `a` will have the value `3`.
 
 
 ### Seventh expression
+
 ```scheme
 (define b (+ a 1))
 
@@ -117,7 +124,8 @@ From now on, `b` will have the value `4`.
 
 
 
-### Eight expression
+### Eighth expression
+
 ```scheme
 (+ a b (* a b))
 
@@ -139,6 +147,7 @@ From now on, `b` will have the value `4`.
 
 
 ### Ninth expression
+
 ```scheme
 (= a b)
 
@@ -152,6 +161,7 @@ From now on, `b` will have the value `4`.
 
 
 ### Tenth expression
+
 ```scheme
 (if (and (> b a) (< b (* a b)))
     b
@@ -201,6 +211,7 @@ b
 
 
 ### Eleventh expression
+
 ```scheme
 (cond ((= a 4) 6)
       ((= b 4) (+ 6 7 a))
@@ -235,6 +246,7 @@ b
 
 
 ### Twelfth expression
+
 ```scheme
 (+ 2 (if (> b a) b a))
 
@@ -254,6 +266,7 @@ b
 
 
 ### Thirteenth expression
+
 ```scheme
 (* (cond ((> a b) a)
          ((< a b) b)

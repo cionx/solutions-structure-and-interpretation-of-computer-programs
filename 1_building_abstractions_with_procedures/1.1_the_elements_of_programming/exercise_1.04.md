@@ -7,6 +7,7 @@
 >   ((if (> b 0) + -) a b))
 > ```
 
+---
 
 The expression `(> b 0)` evaluates to `#t` if `b` is positive, and evaluates to `0` otherwise.
 Consequently, the slightly larger expression `(if (> b 0) + -)` evaluates to `+` if `b` is positive, and evaluates to `-` otherwise.
@@ -39,4 +40,4 @@ The procedure could equivalently be written as follows:
 (define (a-plus-abs-b) a b
   (if (> b 0) (+ a b) (- a b)))
 ```
-(This is really just a spelled-out version of the original implementation.)
+(This is really just a spelled-out version of the provided implementation.)

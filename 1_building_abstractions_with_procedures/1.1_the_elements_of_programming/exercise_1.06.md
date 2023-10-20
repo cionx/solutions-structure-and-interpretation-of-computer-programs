@@ -26,28 +26,28 @@
 > What happens when Alyssa attempts to use this to compute square roots?
 > Explain.
 
+---
 
-
-We can use `new-if` to define the following procedures `new-sqrt-iter` and `new-sqrt`:
+We can use `new-if` to define the following procedures `new-sqrt-iter`:
 ```scheme
 (define (new-sqrt-iter guess x)
   (new-if (good-enough? guess x)
           guess
           (new-sqrt-iter (improve guess x) x)))
 ```
-Suppose that we are given two numbers `g` and `x`, and that we want to evaluate the expression `(new-sqrt-iter g x)`.
+Suppose that we are given two numbers `guess` and `x`, and that we want to evaluate the expression `(new-sqrt-iter guess x)`.
 This means that we need to evaluate the following expression:
 ```scheme
-(new-if (good-enough? g x)
-        g
+(new-if (good-enough? guess x)
+        guess
         (new-sqrt-iter (improve guess x) x)))
 ```
 This expression is a combination.
 Evaluating it begins by evaluating all four subexpressions
 
 - `new-if`,
-- `(good-enough? g x)`,
-- `g`,
+- `(good-enough? guess x)`,
+- `guess`,
 - `(new-sqrt-iter (improve guess x) x)`.
 
 The first three subexpressions pose no problem.
@@ -55,4 +55,6 @@ But the fourth expression is a combination whose leftmost entry is the procedure
 
 So whenever we want to apply the procedure `new-sqrt-iter` (to two arguments), we first need to apply this procedure (to two other arguments).
 We are thus trapped in an endless loop of trying to apply `new-sqrt-iter`.
-Therefore, the original evaluation of `(new-sqrt g x)` never terminates.
+Therefore, the original evaluation of `(new-sqrt-iter g x)` never terminates.
+
+This problem does not occur with the original `sqrt-iter` because `if` is a special form, which is evaluated differently from a combination.

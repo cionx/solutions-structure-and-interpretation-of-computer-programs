@@ -11,15 +11,15 @@
   (< (abs x)
      (* 0.001 (abs y))))
 
-(define (cbrt-iter-1 guess x)
-  (cbrt-iter-2 guess (improve guess x) x))
+(define (cbrt-iter-start guess x)
+  (cbrt-iter-cmp guess (improve guess x) x))
 
-(define (cbrt-iter-2 oldguess newguess x)
+(define (cbrt-iter-cmp oldguess newguess x)
   (if (good-enough? oldguess newguess)
       newguess
-      (cbrt-iter-1 newguess x)))
+      (cbrt-iter-start newguess x)))
 
 (define (cbrt x)
-  (cond ((= x 0.) 0.)
+  (cond ((= x 0) 0)
         ((= x +inf.0) +inf.0)
-        (else (cbrt-iter-1 1. x))))
+        (else (cbrt-iter-start 1. x))))

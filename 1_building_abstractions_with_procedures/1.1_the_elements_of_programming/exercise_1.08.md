@@ -7,9 +7,9 @@
 > Use this formula to implement a cube-root procedure analogous to the square-root procedure.
 > (In Section 1.3.4 we will see how to implement Newton’s method in general as an abstraction of these square-root and cube-root procedures.)
 
+---
 
-
-We can use the same approach as for the previous exercise:
+We follow the same approach as in the previous exercise:
 ```scheme
 (define (improve guess x)
   (/ (+ (/ x
@@ -24,16 +24,16 @@ We can use the same approach as for the previous exercise:
   (< (abs x)
      (* 0.001 (abs y))))
 
-(define (cbrt-iter-1 guess x)
-  (cbrt-iter-2 guess (improve guess x) x))
+(define (cbrt-iter-start guess x)
+  (cbrt-iter-cmp guess (improve guess x) x))
 
-(define (cbrt-iter-2 oldguess newguess x)
+(define (cbrt-iter-cmp oldguess newguess x)
   (if (good-enough? oldguess newguess)
       newguess
-      (cbrt-iter-1 newguess x)))
+      (cbrt-iter-start newguess x)))
 
 (define (cbrt x)
-  (cond ((= x 0.) 0.)
+  (cond ((= x 0) 0)
         ((= x +inf.0) +inf.0)
-        (else (cbrt-iter-1 1. x))))
+        (else (cbrt-iter-start 1. x))))
 ```

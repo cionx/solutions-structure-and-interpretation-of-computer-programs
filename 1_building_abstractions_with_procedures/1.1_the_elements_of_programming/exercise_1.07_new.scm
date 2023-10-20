@@ -1,8 +1,7 @@
+(load "../../sicplib.scm")
+
 (define (improve guess x)
   (average guess (/ x guess)))
-
-(define (average x y)
-  (/ (+ x y) 2))
 
 (define (small-percentage? x y)
   (< (abs x)
@@ -11,17 +10,17 @@
 (define (good-enough? oldguess newguess)
   (small-percentage? (- oldguess newguess) oldguess))
 
-(define (sqrt-iter-1 guess x)
-  (sqrt-iter-2 guess
-               (improve guess x)
-               x))
+(define (sqrt-iter-start guess x)
+  (sqrt-iter-cmp guess
+                 (improve guess x)
+                 x))
 
-(define (sqrt-iter-2 oldguess newguess x)
+(define (sqrt-iter-cmp oldguess newguess x)
   (if (good-enough? oldguess newguess)
       newguess
-      (sqrt-iter-1 newguess x)))
+      (sqrt-iter-start newguess x)))
 
 (define (sqrt x)
-  (cond ((= x 0.) 0.)
+  (cond ((= x 0) 0)
         ((= x +inf.0) +inf.0)
-        (else (sqrt-iter-1 1.0 x))))
+        (else (sqrt-iter-start 1.0 x))))

@@ -11,7 +11,7 @@
 > } \,.
 > $$
 
-
+---
 
 We get the following expression:
 ```scheme

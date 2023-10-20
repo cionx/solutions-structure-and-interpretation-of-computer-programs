@@ -1,3 +1,5 @@
+;;; The original implementation of sqrt-iter from the book.
+
 (define (square x)
   (* x x))
 
@@ -17,5 +19,3 @@
 
 (define (sqrt x)
   (sqrt-iter 1.0 x))
-
-(sqrt 10000)

@@ -18,7 +18,7 @@
 > (Assume that the evaluation rule for the special form `if` is the same whether the interpreter is using normal or applicative order:
 > The predicate expression is evaluated first, and the result determines whether to evaluate the consequent or the alternative expression.)
 
-
+---
 
 ### Applicative-order evaluation
 
@@ -26,7 +26,7 @@ The expression `(test 0 (p))` is a combination.
 To evaluate it with applicative-order evaluation, we first need to evaluate the three subexpressions `test`, `0` and `(p)`.
 The expression `test` evaluates to the procedure of the same name, and `0` to the integer of the same name, so we are left with evaluating `(p)`.
 As `(p)` is defined as `(p)`, this evaluation of `(p)` requires us to… evaluate `(p)`!
-The interpreter will now be stuck in a loop, forever trying to evaluate `(p)` (the second term in `(define (p) (p))` by evaluating `(p)` (the third term in `(define (p) (p)`).
+The interpreter will now be stuck in a loop, forever trying to evaluate `(p)` (the second term in `(define (p) (p))`) by evaluating `(p)` (the third term in `(define (p) (p)`).
 
 
 
