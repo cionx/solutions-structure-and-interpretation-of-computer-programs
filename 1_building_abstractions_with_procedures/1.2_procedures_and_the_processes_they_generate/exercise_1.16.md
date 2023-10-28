@@ -6,16 +6,11 @@
 > At the beginning of the process $a$ is taken to be $1$, and the answer is given by the value of $a$ at the end of the process.
 > In general, the technique of defining an _invariant quantity_ that remains unchanged from state to state is a powerful way to think about the design of iterative algorithms.)
 
+---
 
-
-We can use the following code:
+We can use the following procedures:
 ```scheme
-(define (even? n)
-  (= (remainder n 2) 0))
-
-(define (square x)
-  (* x x))
-
+;; a * b^n is an invariant
 (define (fast-expt-iter a b n)
   (cond ((= n 0) a)
         ((even? n)
@@ -26,3 +21,4 @@ We can use the following code:
 (define (fast-expt b n)
   (fast-expt-iter 1 b n))
 ```
+Note that this procedure works only for non-negative exponents.

@@ -1,16 +1,16 @@
 # Exercise 1.23
 
 > The `smallest-divisor` procedure shown at the start of this section does lots of needless testing:
-> After it checks to see if the number is divisible by $2$ there is no point in checking to see if it is divisible by any larger even numbers.
-> This suggests that the values used for `test-divisor` should not be $2, 3, 4, 5, 6, \dotsc$, but rather $2, 3, 5, 7, 9, \dotsc$
-> To implement this change, define a procedure `next` that returns $3$ if its input is equal to $2$ and otherwise returns its input plus $2$.
+> After it checks to see if the number is divisible by 2 there is no point in checking to see if it is divisible by any larger even numbers.
+> This suggests that the values used for `test-divisor` should not be 2, 3, 4, 5, 6, …, but rather 2, 3, 5, 7, 9, …
+> To implement this change, define a procedure `next` that returns 3 if its input is equal to 2 and otherwise returns its input plus 2.
 > Modify the `smallest-divisor` procedure to use `(next test-divisor)` instead of `(+ test-divisor 1)`.
-> With `timed-prime-test` incorporating this modified version of `smallest-divisor`, run the test for each of the $12$ primes found in Exercise 1.22.
+> With `timed-prime-test` incorporating this modified version of `smallest-divisor`, run the test for each of the 12 primes found in Exercise 1.22.
 > Since this modification halves the number of test steps, you should expect it to run about twice as fast.
 > Is this expectation confirmed?
-> If not, what is the observed ratio of the speeds of the two algorithms, and how do you explain the fact that it is different from $2$?
+> If not, what is the observed ratio of the speeds of the two algorithms, and how do you explain the fact that it is different from 2?
 
-
+---
 
 We use the following modified code:
 ```scheme
@@ -39,13 +39,13 @@ In the modified version, the first four operations stay the same, but the last o
 a comparison in `(= k 2)` and an addition in `(+ k 2)`.
 The modified version therefore requires six elementary operations.
 
-So by switching from the old version to the modified version, each call to `find-divisor` will take $6 / 5 = 1.2$ as many elementary operations, but we only need $1 / 2 = 0.5$ as many calls.
-The run time for the modified version should thus be
+So by switching from the old version to the modified version, each call to `find-divisor` will take 6 / 5 = 1.2 as many elementary operations, but we only need 1 / 2 = 0.5 as many calls.
+The run time for the modified version should therefore be
 $$
   \frac{6}{5} ⋅ \frac{1}{2} = \frac{6}{10} = 0.6
 $$
 times the run time of the current version.
-We should therefore expect a factor of $1 / 0.6 ≈ 1.67$, not $2$.
+We should therefore expect a factor of 1 / 0.6 ≈ 1.67, not 2.
 
 
 
@@ -53,7 +53,7 @@ We should therefore expect a factor of $1 / 0.6 ≈ 1.67$, not $2$.
 
 We now time the new version.
 
-For $10,000,000,000$ we have the following results:
+For 10,000,000,000 (1e10) we have the following results:
 ```text
 1 ]=> (smallest-primes 10000000000 100)
 
@@ -74,7 +74,7 @@ For $10,000,000,000$ we have the following results:
 ;Unspecified return value
 ```
 
-For $10,000,000,000$ we have the following results:
+For 10,000,000,000 (1e12) we have the following results:
 ```text
 1 ]=> (smallest-primes 1000000000000 100)
 
@@ -93,7 +93,7 @@ For $10,000,000,000$ we have the following results:
 ;Unspecified return value
 ```
 
-For $100,000,000,000,000$ we have the following results:
+For 100,000,000,000,000 (1e14) we have the following results:
 ```text
 1 ]=> (smallest-primes 100000000000000 100)
 
@@ -110,7 +110,7 @@ For $100,000,000,000,000$ we have the following results:
 ;Unspecified return value
 ```
 
-For $10,000,000,000,000,000$ we have the following results:
+For 10,000,000,000,000,000 (1e16) we have the following results:
 ```text
 1 ]=> (smallest-primes 10000000000000000 1000)
 
@@ -161,35 +161,32 @@ For $10,000,000,000,000,000$ we have the following results:
 ;Unspecified return value
 ```
 
-We see that instead of a factor of $2$, we have a factor of $12.3 / 7.9 ≈ 1.56$.
-Our estimate of $1.67$ is still a bit too optimistic, but it is already better than the suggested factor of $2$.
+We see that instead of a factor of 2, we have a factor of 12.3 / 7.9 ≈ 1.56.
+Our estimate of 1.67 is still a bit too optimistic, but it is already more accurate than the suggested factor of 2.
 
 
 
 ### A further improvement
 
 Our current use of the procedure `next` is pretty wasteful:
-we always check if its input is $2$, even though this will only be the case one time for each call to `smallest-divisor`.
+we always check if its input is 2, even though this will only be the case one time for each call to `smallest-divisor`.
 We can avoid these repeated unnecessary checks as follows:
 
 ```scheme
 (define (smallest-divisor n)
-  (find-divisor n))
-
-(define (find-divisor n)
-  (if (divides? 2 n)
+  (if (even? n)
       2
-      (find-divisor-iter n 3)))
+      (find-divisor n 3)))
 
-(define (find-divisor-iter n test-divisor)
+(define (find-divisor n test-divisor)
   (cond ((> (square test-divisor) n) n)
         ((divides? test-divisor n) test-divisor)
-        (else (find-divisor-iter n (+ 2 test-divisor)))))
+        (else (find-divisor n (+ test-divisor 2)))))
 ```
 
 The run times of this improved implementation are as follows.
 
-For $10,000,000,000$:
+For 10,000,000,000 (1e10):
 ```text
 1 ]=> (smallest-primes 10000000000 100)
 
@@ -210,7 +207,7 @@ For $10,000,000,000$:
 ;Unspecified return value
 ```
 
-For $1,000,000,000,000$:
+For 1,000,000,000,000 (1e12):
 ```text
 1 ]=> (smallest-primes 1000000000000 100)
 
@@ -229,7 +226,7 @@ For $1,000,000,000,000$:
 ;Unspecified return value
 ```
 
-For $100,000,000,000,000$:
+For 100,000,000,000,000 (1e14):
 ```text
 1 ]=> (smallest-primes 100000000000000 100)
 
@@ -246,7 +243,7 @@ For $100,000,000,000,000$:
 ;Unspecified return value
 ```
 
-For $10,000,000,000,000,000$:
+For 10,000,000,000,000,000 (1e16):
 ```text
 1 ]=> (smallest-primes 10000000000000000 1000)
 

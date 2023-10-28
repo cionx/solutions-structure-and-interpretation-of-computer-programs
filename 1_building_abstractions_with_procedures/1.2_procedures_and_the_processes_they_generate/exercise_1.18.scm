@@ -18,4 +18,6 @@
          (*-fast-iter (+ s a) a (dec b)))))
 
 (define (*-fast a b)
-  (*-fast-iter 0 a b))
+  (if (< b 0)
+      (*-fast (- a) (- b))
+      (*-fast-iter 0 a b)))

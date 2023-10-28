@@ -1,10 +1,10 @@
 # Exercise 1.21
 
-> Use the `smallest-divisor` procedure to find the smallest divisor of each of the following numbers: $199$, $1999$, $19999$.
+> Use the `smallest-divisor` procedure to find the smallest divisor of each of the following numbers: 199, 1999, 19999.
 
+---
 
-
-We get the following output (in `mit-scheme`)
+We get the following output (in `mit-scheme`):
 ```scheme
 1 ]=> (smallest-divisor 199)
 
@@ -18,4 +18,4 @@ We get the following output (in `mit-scheme`)
 
 ;Value: 7
 ```
-We see that both $199$ and $1999$ are prime, whereas $19999$ has $7$ as its smallest divisor.
+We see that both 199 and 1999 are prime, whereas 19999 has 7 as its smallest divisor.

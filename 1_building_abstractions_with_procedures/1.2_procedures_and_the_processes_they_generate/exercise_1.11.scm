@@ -10,7 +10,7 @@
     (+ a
        (* 2 b)
        (* 3 c)))
-  (if (<= counter 0)
+  (if (= counter 0)
       a
       (f-iterative-iter (next a b c) a b (- counter 1))))
 

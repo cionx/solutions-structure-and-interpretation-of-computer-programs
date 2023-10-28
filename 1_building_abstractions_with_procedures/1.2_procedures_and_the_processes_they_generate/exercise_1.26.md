@@ -21,12 +21,12 @@
 > “By writing the procedure like that, you have transformed the $Θ(\log n)$ process into a $Θ(n)$ process.”
 > Explain.
 
-
+---
 
 The original implementation of `expmod` that uses `square` needs to compute the expression `(expmod base (/ exp 2) m)` only once.
 But Lois’ code needs to evaluate this expression two times, negating the improvement from the original implementation.
 
-More precisely, let $A(n)$ be the number of arithmetic operations that Louis’ implementation of `expmod` requires to evaluate the expression `(expmod base n m)`.
+More precisely, let $A(n)$ be the number of arithmetic operations that Louis’ implementation of `expmod` requires evaluating the expression `(expmod base n m)`.
 We have the initial value
 $$
   A(0) = 1

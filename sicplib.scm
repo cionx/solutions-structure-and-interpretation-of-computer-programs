@@ -12,12 +12,21 @@
 
 
 
+;;; 1.2.3 Orders of Growth
+
 (define (cube x)
   (* x x x))
 
-(define (identity x) x)
 
 
+;;; 1.2.4 Exponentiation
+
+(define (even? n)
+  (= (remainder n 2) 0))
+
+
+
+;;; 1.2.6 Example: Testing for Primality
 
 (define (prime? n)
   (= n (smallest-divisor n)))
@@ -42,7 +51,23 @@
          (remainder (* base (expmod base (- exp 1) m))
                     m))))
 
+(define (timed-prime-test n)
+  (newline)
+  (display n)
+  (start-prime-test n (runtime)))
 
+(define (start-prime-test n start-time)
+  (if (prime? n)
+      (report-prime (- (runtime) start-time))))
+
+(define (report-prime elapsed-time)
+  (display " *** ")
+  (display elapsed-time))
+
+
+;;;
+
+(define (identity x) x)
 
 (define (prime-sum? pair)
   (prime? (+ (car pair) (cadr pair))))

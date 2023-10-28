@@ -1,9 +1,6 @@
-(define (even? n)
-  (= (remainder n 2) 0))
+(load "../../sicplib.scm")
 
-(define (square x)
-  (* x x))
-
+;; a * b^n is an invariant
 (define (fast-expt-iter a b n)
   (cond ((= n 0) a)
         ((even? n)

@@ -5,7 +5,7 @@
 > Do your data bear this out?
 > Can you explain any discrepancy you find?
 
-
+---
 
 To use the procedure `fast-prime?`, we need to decide on the number of iterations.
 It would probably make sense to make the number of iterations in `(fast-prime? n times)` depend on $n$.
@@ -14,10 +14,10 @@ More specifically, the larger $n$, the more iterations we should allow.
 However, this would increase the growth from $Θ(\log n)$ to $Θ(f(n) \log n)$, where $f(n)$ is the number of iterations.
 As we want to keep the growth as $Θ(\log n)$, we will therefore use a constant number of iterations.
 
-We choose this constant as $1,000,000$.
-(The run time of `fast-prime?` is proportional in the number of iterations.
-If we don’t choose enough iterations, then `fast-prime?` will be evaluated nearly instantaneously.
-This then prevents us from examining the run time.)
+We choose this constant as $1,000,000$ (one million).
+(The running time of `fast-prime?` is proportional in the number of iterations.
+If we don’t use enough iterations, then `fast-prime?` will be evaluated nearly instantaneously.
+This then prevents us from examining the running time.)
 
 
 We modify the procedure `timed-prime-test` as follows:
@@ -31,7 +31,7 @@ Repeatedly increasing the input $n$ in `(times-prime-test n)` by a factor of $10
 
 We now test the new version of `times-prime-test`.
 
-Around $1\mathrm{e}10$ we have a run time of around $72.606$ seconds.
+Around $1\mathrm{e}10$ we have a running time of around $72.606$ seconds.
 ```text
 1 ]=> (smallest-primes 10000000000 100)
 
@@ -52,7 +52,7 @@ Around $1\mathrm{e}10$ we have a run time of around $72.606$ seconds.
 ;Unspecified return value
 ```
 
-Around $1\mathrm{e}12$ we have a run time of around $85.555$ seconds.
+Around $1\mathrm{e}12$ we have a running time of around $85.555$ seconds.
 ```text
 1 ]=> (smallest-primes 1000000000000 100)
 
@@ -71,7 +71,7 @@ Around $1\mathrm{e}12$ we have a run time of around $85.555$ seconds.
 ;Unspecified return value
 ```
 
-Around $1\mathrm{e}14$ we have a run time of around $100.0425$ seconds.
+Around $1\mathrm{e}14$ we have a running time of around $100.0425$ seconds.
 ```text
 1 ]=> (smallest-primes 100000000000000 100)
 
@@ -88,7 +88,7 @@ Around $1\mathrm{e}14$ we have a run time of around $100.0425$ seconds.
 ;Unspecified return value
 ```
 
-Around $1\mathrm{e}16$ we have a run time of around $111.6525$ seconds.
+Around $1\mathrm{e}16$ we have a running time of around $111.6525$ seconds.
 ```text
 1 ]=> (smallest-primes 10000000000000000 100)
 
@@ -105,7 +105,7 @@ Around $1\mathrm{e}16$ we have a run time of around $111.6525$ seconds.
 ;Unspecified return value
 ```
 
-Around $1\mathrm{e}18$ we have a run time of around $126.8$ seconds.
+Around $1\mathrm{e}18$ we have a running time of around $126.8$ seconds.
 ```text
 1 ]=> (smallest-primes 1000000000000000000 100)
 
@@ -124,7 +124,7 @@ Around $1\mathrm{e}18$ we have a run time of around $126.8$ seconds.
 ;Unspecified return value
 ```
 
-Around $1\mathrm{e}20$ we have a run time of around $160.431$ seconds.
+Around $1\mathrm{e}20$ we have a running time of around $160.431$ seconds.
 ```text
 1 ]=> (smallest-primes 100000000000000000000 1000)
 
@@ -183,7 +183,7 @@ Around $1\mathrm{e}20$ we have a run time of around $160.431$ seconds.
 ;Unspecified return value
 ```
 
-We see that the increases in (average) run time are roughly $13$ seconds, $14.5$ seconds, $11.6$ seconds, $15.1$ seconds, and $33.6$ seconds.
+We see that the increases in (average) running time are roughly $13$ seconds, $14.5$ seconds, $11.6$ seconds, $15.1$ seconds, and $33.6$ seconds.
 The increase is very roughly constant, as expected from the growth type $Θ(\log n)$.
 
 The exception is the last increase, which much larger than expected.

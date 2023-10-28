@@ -18,17 +18,20 @@
 >   (display elapsed-time))
 > ```
 > Using this procedure, write a procedure `search-for-primes` that checks the primality of consecutive odd integers in a specified range.
-> Use your procedure to find the three smallest primes larger than $1000$;
-> larger than $10,000$;
-> larger than $100,000$;
-> larger than $1,000,000$.
+> Use your procedure to find the three smallest primes
+>
+> - larger than 1000;
+> - larger than 10,000;
+> - larger than 100,000;
+> - larger than 1,000,000.
+>
 > Note the time needed to test each prime.
-> Since the testing algorithm has order of growth of $Θ(\sqrt{n})$, you should expect that testing for primes around $10,000$ should take about $\sqrt{10}$ times as long as testing for primes around $1000$.
+> Since the testing algorithm has order of growth of $Θ(\sqrt{n})$, you should expect that testing for primes around 10,000 should take about $\sqrt{10}$ times as long as testing for primes around 1000.
 > Do your timing data bear this out?
-> How well do the data for $100,000$ and $1,000,000$ support the $Θ(\sqrt{n})$ prediction?
+> How well do the data for 100,000 and 1,000,000 support the $Θ(\sqrt{n})$ prediction?
 > Is your result compatible with the notion that programs on your machine run in time proportional to the number of steps required for the computation?
 
-
+---
 
 We write an auxiliary function to run multiple instances of `timed-prime-test` in succession.
 ```scheme
@@ -43,7 +46,7 @@ We use the not-yet-introduced construction `(begin …)` to group together multi
 
 Computers have become much faster since the book was written, so we need _much_ larger inputs to observe non-zero times.
 
-We start with $10,000,000,000$:
+We start with 10,000,000,000 (1e10):
 ```text
 1 ]=> (smallest-primes 10000000000 100)
 
@@ -63,9 +66,9 @@ We start with $10,000,000,000$:
 *** end ***
 ;Unspecified return value
 ```
-It takes between $0.12$ and $0.13$ seconds per prime.
+It takes between 0.12 and 0.13 seconds per prime.
 
-Next we start with $1,000,000,000,000$:
+Next we start with 1,000,000,000,000 (1e12):
 ```text
 1 ]=> (smallest-primes 1000000000000 100)
 
@@ -84,7 +87,7 @@ Next we start with $1,000,000,000,000$:
 ;Unspecified return value
 ```
 
-Next we start with $100,000,000,000,000$:
+Next we start with 100,000,000,000,000 (1e14):
 ```text
 1 ]=> (smallest-primes 100000000000000 100)
 
@@ -101,7 +104,7 @@ Next we start with $100,000,000,000,000$:
 ;Unspecified return value
 ```
 
-Finally, we start with $10,000,000,000,000,000$:
+Finally, we start with 10,000,000,000,000,000 (1e16):
 ```text
 1 ]=> (smallest-primes 10000000000000000 1000)
 
@@ -152,5 +155,5 @@ Finally, we start with $10,000,000,000,000,000$:
 ;Unspecified return value
 ```
 
-We see that increasing the number $n$ by a factor of $100$ increases the run time of `(timed-prime-test n)` by a factor of $10$.
+We see that increasing the number $n$ by a factor of 100 increases the run time of `(timed-prime-test n)` by a factor of 10.
 This supports the $Θ(\sqrt{n})$ prediction.

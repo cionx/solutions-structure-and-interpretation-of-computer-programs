@@ -3,9 +3,12 @@
 > Prove that $\operatorname{Fib}(n)$ is the closest integer to $ϕ^n / \sqrt{5}$, where $ϕ = (1 + \sqrt{5}) / 2$.
 > Hint:
 > Let $ψ = (1 - \sqrt{5}) / 2$.
-> Use induction and the definition of the Fibonacci numbers (see Section 1.2.2) to prove that $\operatorname{Fib}(n) = (ϕ^n - ψ^n) / \sqrt{5}$.
+> Use induction and the definition of the Fibonacci numbers (see Section 1.2.2) to prove that
+> $$
+>   \operatorname{Fib}(n) = \frac{ϕ^n - ψ^n}{\sqrt{5}} \,.
+> $$
 
-
+---
 
 The numbers $ϕ$ and $ψ$ are the two roots of the quadratic polynomial
 $$
@@ -31,7 +34,7 @@ $$
   =
   \frac{ϕ - ψ}{\sqrt{5}}
   =
-  \frac{1 + \sqrt{5} - (1 - \sqrt{5})}{2 \sqrt{5}}
+  \frac{(1 + \sqrt{5}) - (1 - \sqrt{5})}{2 \sqrt{5}}
   =
   \frac{2 \sqrt{5}}{2 \sqrt{5}}
   =
@@ -58,16 +61,27 @@ $$
     \operatorname{Fib}(n) \,.
   \end{aligned}
 $$
+This proves the claimed identity $\operatorname{Fib}(n) = (ϕ^n - ψ^n) / \sqrt{5}$ for all $n ≥ 0$.
 
 We have
 $$
-  |ψ| = \frac{|1 - \sqrt{5}|}{2} = \frac{\sqrt{5} - 1}{2} < 1 \,,
+  |ψ| = \frac{|1 - \sqrt{5}|}{2} = \frac{\sqrt{5} - 1}{2} < 1
 $$
-and for every natural number $n$ therefore
+because
+$$
+  \frac{\sqrt{5} - 1}{2} < 1
+  \iff
+  \sqrt{5} - 1 < 2
+  \iff
+  \sqrt{5} < 3
+  \iff
+  5 < 9 \,.
+$$
+For every natural number $n ≥ 0$ we have therefore the (in)equalities
 $$
   \biggl| \operatorname{Fib}(n) - \frac{ϕ^n}{\sqrt{5}} \biggr|
   =
-  \biggl| \frac{ψ^n}{\sqrt{5}} \biggr|
+  \biggl| - \frac{ψ^n}{\sqrt{5}} \biggr|
   =
   \frac{|ψ|^n}{\sqrt{5}}
   ≤
@@ -79,7 +93,7 @@ $$
   =
   \frac{1}{2} \,.
 $$
-The strict inequality
+This strict inequality
 $$
   \biggl| \operatorname{Fib}(n) - \frac{ϕ^n}{\sqrt{5}} \biggr|
   <

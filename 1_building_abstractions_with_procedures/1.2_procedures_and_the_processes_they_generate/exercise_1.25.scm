@@ -1,5 +1,4 @@
-(define (square x)
-  (* x x))
+(load "../../sicplib.scm") ;; for square
 
 (define (expmod-old base exp m)
   (cond ((= exp 0) 1)
