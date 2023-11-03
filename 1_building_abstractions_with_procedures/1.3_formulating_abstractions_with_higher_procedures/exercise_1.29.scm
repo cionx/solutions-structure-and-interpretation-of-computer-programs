@@ -1,3 +1,5 @@
+;;; Copied from the book.
+
 (define (sum term a next b)
   (if (> a b)
       0
@@ -10,6 +12,10 @@
   (* (sum f (+ a (/ dx 2.0)) add-dx b)
      dx))
 
+
+
+;;; New code.
+
 (define (simpson f a b n)
   (define h-exact (/ (- b a) n))
   (define h (/ h-exact 1.0)) ; divide by 1.0 to force floating point
@@ -21,7 +27,8 @@
        (* 2 (f (+ x h)))))
   (define (add-2h x)
     (+ x (* 2 h)))
-  (define a-plus-h (+ a h))
+  (define a-plus-h
+    (+ a h))
   (+ (f a)
      (sum two-terms a-plus-h add-2h b)
      (- (f b))))

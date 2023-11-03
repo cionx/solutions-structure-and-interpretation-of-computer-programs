@@ -1,4 +1,4 @@
-(define dx 0.00001)
+(load "../../sicplib.scm") ; for dx
 
 (define (smooth f)
   (lambda (x)

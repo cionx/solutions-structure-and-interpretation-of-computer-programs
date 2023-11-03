@@ -6,9 +6,14 @@
 > Compare the number of steps this takes with and without average damping.
 > (Note that you cannot start `fixed-point` with a guess of $1$, as this would cause division by $\log(1) = 0$.)
 
+---
 
-
-We modify the code of `fixed-point` (or more specifically, of its subprocedure `try`) as follows:
+We modify the code of `fixed-point` (or more specifically, of its subprocedure `try`) by adding the following two lines:
+```scheme
+(display guess)
+(newline)
+```
+We thus arrive at the following overall code:
 ```scheme
 (define tolerance 0.00001)
 
@@ -93,5 +98,5 @@ We get the following output:
 
 We see that the convergence is faster.
 This shouldn’t be too surprising:
-the non-dampened version overshoots goes from the initial guess of $2.0$ to $9.66…$, which overshoots the goal of $4.55…$ by quite a bit.
+the non-dampened version overshoots goes from the initial guess of 2.0 to 9.66…, which overshoots the goal of 4.55… by quite a bit.
 The dampening significantly reduces this overshooting.

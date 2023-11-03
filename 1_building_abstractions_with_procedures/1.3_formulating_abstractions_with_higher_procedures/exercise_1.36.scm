@@ -1,4 +1,6 @@
-(define tolerance 0.00001)
+(load "../../sicplib.scm") ;; for `average` and `tolerance`
+
+;;; a
 
 (define (fixed-point f first-guess)
   (define (close-enough? v1 v2)
@@ -13,9 +15,15 @@
           (try next))))
   (try first-guess))
 
+(fixed-point (lambda (x) (/ (log 1000) (log x))) 2.)
+
+;;; b
+
 (define (dampen f)
   (lambda (x)
-    (/ (+ x (f x)) 2)))
+    (average x (f x))))
 
 (define (fixed-point-dampen f first-guess)
   (fixed-point (dampen f) first-guess))
+
+(fixed-point-dampen (lambda (x) (/ (log 1000) (log x))) 2.)

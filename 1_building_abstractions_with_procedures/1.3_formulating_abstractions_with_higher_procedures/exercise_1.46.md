@@ -7,7 +7,7 @@
 > `iterative-improve` should return as its value a procedure that takes a guess as argument and keeps improving the guess until it is good enough.
 > Rewrite the `sqrt` procedure of Section 1.1.7 and the `fixed-point` procedure of Section 1.3.3 in terms of `iterative-improve`.
 
-
+---
 
 We can implement the described procedure `iterative-improve` as follows:
 ```scheme
@@ -18,6 +18,7 @@ We can implement the described procedure `iterative-improve` as follows:
         (iter (improve guess))))
   iter)
 ```
+We did not use `lambda` because we want the returned procedure to reference itself.
 
 We can implement `sqrt` in terms of `iterative-improve` as follows:
 ```scheme
@@ -27,11 +28,6 @@ We can implement `sqrt` in terms of `iterative-improve` as follows:
   (define (improve y)
     (average y (/ x y)))
   ((iterative-improve good-enough? improve) 1.0))
-
-(define (square x) (* x x))
-
-(define (average x y)
-  (/ (+ x y) 2))
 ```
 
 We can also implement `fixed-point` in terms of `iterative-improve` as follows:

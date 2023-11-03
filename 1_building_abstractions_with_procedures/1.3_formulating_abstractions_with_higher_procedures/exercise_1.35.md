@@ -2,7 +2,7 @@
 
 > Show that the golden ratio $ϕ$ (Section 1.2.2) is a fixed point of the transformation $x \mapsto 1 + 1 / x$, and use this fact to compute $ϕ$ by means of the `fixed-point` procedure.
 
-
+---
 
 The golden ratio $ϕ = (1 + \sqrt{5}) / 2$, as well as the number $(1 - \sqrt{5}) / 2$, is a root of the polynomial $x^2 - x - 1$.
 As $ϕ$ is nonzero, we have the logical equivalences

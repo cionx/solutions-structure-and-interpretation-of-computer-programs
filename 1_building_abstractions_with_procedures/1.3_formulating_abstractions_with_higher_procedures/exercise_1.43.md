@@ -12,16 +12,13 @@
 > Hint:
 > You may find it convenient to use `compose` from Exercise 1.42.
 
-
+---
 
 We can use the following code:
 ```scheme
-(define (compose f g)
-  (lambda (x) (f (g x))))
-
 (define (repeated f n)
   (if (= n 0)
-      (lambda (x) x)
+      identity
       (compose f (repeated f (- n 1)))))
 ```
 

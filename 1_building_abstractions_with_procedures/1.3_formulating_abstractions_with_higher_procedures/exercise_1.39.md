@@ -8,7 +8,7 @@
 > Define a procedure `(tan-cf x k)` that computes an approximation to the tangent function based on Lambert’s formula.
 > `k` specifies the number of terms to compute, as in Exercise 1.37.
 
-
+---
 
 We can implement the desired procedure as follows:
 ```scheme
@@ -20,4 +20,15 @@ We can implement the desired procedure as follows:
   (define (d i)
     (- (* 2 i) 1))
   (cont-frac n d k))
+```
+
+We can check our procedure against the built-in `tan` procedure of `mit-scheme`:
+```text
+1 ]=> (tan 10)
+
+;Value: .6483608274590866
+
+1 ]=> (tan-cf 10 100)
+
+;Value: .6483608274590866
 ```

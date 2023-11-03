@@ -8,7 +8,9 @@
 > Use this to implement a simple procedure for computing $n$th roots using `fixed-point`, `average-damp`, and the `repeated` procedure of Exercise 1.43.
 > Assume that any arithmetic operations you need are available as primitives.
 
-We use the following code:
+---
+
+We use the following code for computing the $n$th root of a number $x$ with the $k$-times dampening of $y \mapsto x / y^{n - 1}$.
 ```scheme
 (define (root-damp x n k)
   (define (f y)
@@ -17,6 +19,7 @@ We use the following code:
     ((repeated average-damp k) f)
     1.0))
 ```
+We are using scheme’s built-in procedure `expt` to calculate the power $y^{n - 1}$.
 
 The following table shows how large $k$ must be for a specific $n$, according to our observations:
 
@@ -63,7 +66,5 @@ This leads to the following procedure:
   (define (f y)
     (/ x (expt y (- n 1))))
   (let ((k (log2int n)))
-    (fixed-point
-      ((repeated average-damp k) f)
-      1.0)))
+    (root-damp x n k)))
 ```

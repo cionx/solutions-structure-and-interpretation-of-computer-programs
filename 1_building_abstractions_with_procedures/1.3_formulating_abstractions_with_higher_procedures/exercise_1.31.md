@@ -14,25 +14,30 @@
 > 2.  If your `product` procedure generates a recursive process, write one that generates an iterative process.
 >     If it generates an iterative process, write one that generates a recursive process.
 
+---
 
-
-### 1.
-
-The procedure `product` can be implemented as follows:
+The procedure `product` can be implemented either recursively or iteratively:
 ```scheme
+;; recursive version
 (define (product term a next b)
   (if (> a b)
       1
       (* (term a)
          (product term (next a) next b))))
+
+;; iterative version
+(define (product term a next b)
+  (define (iter a result)
+    (if (> a b)
+        result
+        (iter (next a) (* result (term a)))))
+  (iter a 1))
 ```
 
 We can then implement `factorial` as follows:
 ```scheme
 (define (factorial n)
-  (define (id x) x)
-  (define (inc x) (+ 1 x))
-  (product id 1 inc n))
+  (product identity 1 inc n))
 ```
 
 For the approximation of $π$, we arrange the given formula as
@@ -46,26 +51,11 @@ $$
 This rearrangement leads to the following procedure:
 ```scheme
 (define (pi-approx n)
-  (define (term k)
-    (/ (* k (+ 2.0 k))
-       (* (+ 1 k) (+ 1 k))))
-  (define (inc-2 x) (+ 2 x))
-  (* (product term 2 inc-2 (* 2 n))
-     4))
+  (define (factor k)
+    (/ (* k (+ k 2.0))
+       (* (+ k 1) (+ k 1))))
+  (define (inc-2 x)
+    (+ 2 x))
+  (* 4 (product factor 2 inc-2 (* 2 n))))
 ```
 In the third line, we use a floating point number to force the overall result of `pi-approx` to be a floating point.
-
-
-
-### 2.
-
-The above implementation of `product` generates a recursive process.
-The following implementation generates an iterative process:
-```scheme
-(define (product term a next b)
-  (define (iter a result)
-    (if (> a b)
-        result
-        (iter (next a) (* result (term a)))))
-  (iter a 1))
-```

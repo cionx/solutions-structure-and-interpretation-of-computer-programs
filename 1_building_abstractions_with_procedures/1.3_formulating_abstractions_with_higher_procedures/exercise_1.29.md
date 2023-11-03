@@ -11,7 +11,7 @@
 > Define a procedure that takes as arguments $f$, $a$, $b$, and $n$ and returns the value of the integral, computed using Simpson’s rule.
 > Use your procedure to integrate `cube` between $0$ and $1$ (with $n = 100$ and $n = 1000$), and compare the results to those of the `integral` procedure shown above.
 
-
+---
 
 Simpson’s rule can also be written as follows:
 $$
@@ -40,13 +40,14 @@ This form of Simpson’s rule suggests the following implementation:
        (* 2 (f (+ x h)))))
   (define (add-2h x)
     (+ x (* 2 h)))
-  (define a-plus-h (+ a h))
+  (define a-plus-h
+    (+ a h))
   (+ (f a)
      (sum two-terms a-plus-h add-2h b)
      (- (f b))))
 ```
 
-For computing $∫_0^1 x^k \,\mathrm{d}x$, here is the result with `integral`:
+For computing $\int_0^1 x^3 \,\mathrm{d}x$, here is the result with `integral`:
 ```text
 1 ]=> (integral cube 0 1 0.01)
 

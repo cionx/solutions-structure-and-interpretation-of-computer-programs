@@ -7,7 +7,7 @@
 > (((double (double double)) inc) 5)
 > ```
 
-
+---
 
 We can implement `double` as follows:
 ```scheme
@@ -15,30 +15,41 @@ We can implement `double` as follows:
   (lambda (x) (f (f x))))
 ```
 
-In mathematical notation, we have $\mathrm{double}(f) = f ∘ f = f^2$.
+In mathematical notation, we have $\operatorname{double}(f) = f ∘ f = f^2$.
 Therefore,
 $$
-  (\mathrm{double}(\mathrm{double}))(f)
-  =
-  \mathrm{double}^2(f)
-  =
-  \mathrm{double}(f^2)
-  =
-  (f^2)^2
-  =
+  \begin{aligned}
+  \operatorname{double}(\operatorname{double})(f)
+  &=
+  \operatorname{double}^2(f) \\
+  &=
+  \operatorname{double}(\operatorname{double}(f)) \\
+  &=
+  \operatorname{double}(f^2) \\
+  &=
+  (f^2)^2 \\
+  &=
   f^4 \,.
+  \end{aligned}
 $$
 Consequently,
 $$
-  (\mathrm{double}(\mathrm{double}(\mathrm{double}))(f)
-  =
-  (\mathrm{double}(\mathrm{double}))^2(f)
-  =
-  (\mathrm{double}(\mathrm{double}))(f^4)
-  =
-  (f^4)^4
-  =
+  \begin{aligned}
+  (\operatorname{double}(\operatorname{double}(\operatorname{double}))(f)
+  &=
+  \operatorname{double}(\operatorname{double})^2(f) \\
+  &=
+  \operatorname{double}(\operatorname{double})
+  \Bigl(
+    \operatorname{double}(\operatorname{double})(f)
+  \Bigr) \\
+  &=
+  \operatorname{double}(\operatorname{double})(f^4) \\
+  &=
+  (f^4)^4 \\
+  &=
   f^{16} \,.
+  \end{aligned}
 $$
 
 We see that `((double (double double)) inc)` should be a procedure that increases its input by $16$.

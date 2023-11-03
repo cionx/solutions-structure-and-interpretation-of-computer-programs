@@ -1,3 +1,7 @@
+(load "../../sicplib.scm") ; for `square`, `average`
+
+
+
 (define (iterative-improve good-enough? improve)
   (define (iter guess)
     (if (good-enough? guess)
@@ -22,10 +26,3 @@
   (define (good-enough? guess)
     (close-enough? guess (f guess)))
   ((iterative-improve good-enough? f) first-guess))
-
-
-
-(define (square x) (* x x))
-
-(define (average x y)
-  (/ (+ x y) 2))

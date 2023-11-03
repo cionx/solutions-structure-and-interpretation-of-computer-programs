@@ -16,7 +16,7 @@
 > What happens if we (perversely) ask the interpreter to evaluate the combination `(f f)`?
 > Explain.
 
-
+---
 
 The expression `(f f)` is evaluated to `(f 2)`, which is then further evaluated to `(2 2)`.
 The expression `(2 2)` results in an error because `2` is not a procedure, and thus cannot be applied to another value.

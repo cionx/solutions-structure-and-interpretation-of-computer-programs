@@ -9,7 +9,7 @@
 > 49
 > ```
 
-
+---
 
 We can implement the procedure `compose` as follows:
 ```scheme

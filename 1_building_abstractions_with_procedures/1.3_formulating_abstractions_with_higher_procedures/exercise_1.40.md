@@ -6,13 +6,13 @@
 > ```
 > to approximate zeros of the cubic $x^3 + ax^2 + bx + c$.
 
-
+---
 
 We can write such a procedure as follows:
 ```scheme
 (define (cubic a b c)
   (lambda (x)
-    (+ (* (cube x))
+    (+ (cube x)
        (* a (square x))
        (* b x)
        c)))

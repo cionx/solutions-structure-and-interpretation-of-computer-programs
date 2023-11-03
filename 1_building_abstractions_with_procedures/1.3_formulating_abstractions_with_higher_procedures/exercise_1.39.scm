@@ -1,13 +1,5 @@
-(define (cont-frac n d k)
-  (define (aux n d i result)
-    (if (<= i 0)
-        result
-        (let ((new-result
-                (/ (n i) (+ (d i) result))))
-          (if (<= i 0)
-              result
-              (aux n d (- i 1) new-result)))))
-  (aux n d k 0.0))
+(load "../../sicplib.scm") ; for `square`
+(load "exercise_1.37.scm") ; for `cont-frac`
 
 (define (tan-cf x k)
   (define (n i)
@@ -17,8 +9,3 @@
   (define (d i)
     (- (* 2 i) 1))
   (cont-frac n d k))
-
-
-
-(define (square x)
-  (* x x))

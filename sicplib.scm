@@ -65,15 +65,49 @@
   (display elapsed-time))
 
 
-;;;
+
+;;; 1.3.1 Procedures as Arguments
 
 (define (identity x) x)
 
+(define (inc x) (+ x 1))
+
+
+
+;;; 1.3.3 Procedures as General Methods
+
+(define tolerance 0.00001)
+
+(define (fixed-point f first-guess)
+  (define (close-enough? v1 v2)
+    (< (abs (- v1 v2))
+       tolerance))
+  (define (try guess)
+    (let ((next (f guess)))
+      (if (close-enough? guess next)
+          next
+          (try next))))
+  (try first-guess))
+
+(define dx 0.00001)
+
+(define (derivative g) ; renamed to avoid later collision
+  (lambda (x) (/ (- (g (+ x dx)) (g x)) dx)))
+
+(define (newton-transform g)
+  (lambda (x) (- x
+                 (/ (g x)
+                    ((derivative g) x)))))
+
+(define (newtons-method g guess)
+  (fixed-point (newton-transform g) guess))
+
+
+
+
+
 (define (prime-sum? pair)
   (prime? (+ (car pair) (cadr pair))))
-
-
-
 
 (define (accumulate op initial sequence)
   (if (null? sequence)

@@ -24,9 +24,23 @@
 > If your `cont-frac` procedure generates a recursive process, write one that generates an iterative process.
 > If it generates an iterative process, write one that generates a recursive process.
 
-
+---
 
 ### a.
+
+The idea is to use the recursion relation
+$$
+  x_i = \frac{N_i}{D_i + x_{i + 1}}
+$$
+with initial value $x_{k + 1} = 0$.
+This then gives the values
+$$
+  x_{k + 1} = 0 \,, \qquad
+  x_k = \frac{N_k}{D_k} \,, \qquad
+  x_{k - 1} = \cfrac{N_{k - 1}}{D_{k - 1} + \cfrac{N_k}{D_k}} \,, \qquad
+  x_{k - 2} = \cfrac{N_{k - 2}}{D_{k - 2} + \cfrac{N_{k - 1}}{D_{k - 1} + \cfrac{N_k}{D_k}}} \,, \qquad
+  \dotsc
+$$
 
 We can implement the procedure `cont-frac` as follows:
 ```scheme
@@ -40,8 +54,8 @@ We can implement the procedure `cont-frac` as follows:
   (aux n d 1 k))
 ```
 
-To compute $1 / ϕ$ up to a certain precision, it would be good to know that the digits of $1 / ϕ$ are.
-Luckily, we know that $ϕ = 1 + 1 / ϕ$, and thus
+To compute $1 / ϕ$ up to a certain precision, it would be good to know the digits of $1 / ϕ$.
+Luckily, we know that $ϕ = 1 + 1 / ϕ$ and thus
 $$
   1 / ϕ = ϕ - 1 ≈ 0.618033988749…
 $$
@@ -73,16 +87,16 @@ However, already for $k = 10$ the error has four zeroes after the period.
 ### b.
 
 The above implementation of `cont-frac` generates a recursive procedure.
-The following implementation generates an iterative procedure:
+The following implementation generates an iterative procedure instead:
 ```scheme
 (define (cont-frac n d k)
   (define (aux n d i result)
     (if (<= i 0)
         result
-        (let ((new-result
-                (/ (n i) (+ (d i) result))))
-          (if (<= i 0)
-              result
-              (aux n d (- i 1) new-result)))))
+        (let ((next-result
+                (/ (n i)
+                   (+ (d i)
+                      result))))
+          (aux n d (- i 1) next-result))))
   (aux n d k 0.0))
 ```
