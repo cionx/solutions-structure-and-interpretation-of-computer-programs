@@ -14,14 +14,14 @@
 > Use substitution to evaluate `(add-1 zero)`).
 > Give a direct definition of the addition procedure `+` (not in terms of repeated application of `add-1`).
 
-
+---
 
 Let us denote the $n$th Church numeral as $Λ_n$.
-The Church numerals are higher-order functions, recursively defined as
+According to the given code, the Church numerals are higher-order functions, recursively defined as
 $$
   Λ_0(f)(x) = x \,,
   \quad
-  Λ_{ν(n)}(f) = f( Λ_n(f)(x) ) \,,
+  Λ_{ν(n)}(f)(x) = f( Λ_n(f)(x) ) \,,
 $$
 where $ν$ is the successor function of the natural numbers.
 We see from that $Λ_n(f)$ is given by the $n$-fold composite $f^n = f ∘ \dotsb ∘ f$ for every $n ≥ 0$, where (as usual) $f^0$ is the identity function.
@@ -53,24 +53,25 @@ Explicit descriptions of the first few Church numerals are therefore as follows:
   (lambda (x) (f (f (f (f (f x)))))))
 ```
 
-We have
+We observe that
 $$
-  Λ_m(f)( Λ_n(f)(x) )
+  Λ_m(f) ∘ Λ_n(f)
   =
-  Λ_m( f^n(x) )
+  f^m ∘ f^n
   =
-  f^m(f^n(x))
+  f^{m + n}
   =
-  f^{m + n}(x) \,,
+  Λ_{m + n}(f) \,.
 $$
-and thus $Λ_m(f) ∘ Λ_n(f) = Λ_{m + n}(f)$.
-We can therefore implement addition as follows:
+We can therefore implement addition in terms of composition:
 ```scheme
-(define (add m n)
-  (lambda (f) (lambda (x) ((m f) ((n f) x)))))
+(define (add-church m n)
+  (lambda (f)
+    (lambda (x)
+      ((m f) ((n f) x)))))
 ```
 
-We also observe that
+We similarly observe that
 $$
   Λ_m( Λ_n(f) )
   =
@@ -83,8 +84,8 @@ $$
 and thus $Λ_m ∘ Λ_n = Λ_{m n}$.
 We can therefore implement multiplication as follows:
 ```scheme
-(define (mult m n)
-  (lambda (f) (lambda (x) ((m (n f)) x))))
+(define (mult-church m n)
+  (lambda (f) (m (n f))))
 ```
 
 Lastly, we observe that
@@ -93,42 +94,51 @@ $$
   =
   Λ_n^m
   =
-  Λ_n ∘ \dotsb ∘ Λ_n
+  \underbrace{ Λ_n ∘ \dotsb ∘ Λ_n }_m
   =
-  Λ_{n \dotsm n}
+  Λ_{\underbrace{n \dotsm n}_m}
   =
   Λ_{n^m} \,.
 $$
 We can therefore implement exponentiation as follows:
 ```scheme
-(define (expt m n)
-  (lambda (f) (lambda (x) (((n m) f) x))))
+(define (expt-church m n)
+  (lambda (f) ((n m) f)))
 ```
 
 To test our functions, we use the following procedures to convert between Church numerals and integers:
 ```scheme
-(define (int-to-church n)
+(define (int->church n)
   (define (repeated f n)
     (if (= n 0)
         (lambda (x) x)
         (lambda (x) ((repeated f (- n 1)) (f x)))))
-  (lamba (f) (repeated f n)))
+  (lambda (f) (repeated f n)))
 
-(define (church-to-int n)
+(define (church->int n)
   (define (inc x) (+ x 1))
   ((n inc) 0))
 ```
+
 We can observe the following results:
 ```text
-1 ]=> (church-to-int (add four five))
+1 ]=> (church->int (add-church four five))
 
 ;Value: 9
 
-1 ]=> (church-to-int (mult three four))
+1 ]=> (church->int (mult-church three four))
 
 ;Value: 12
 
-1 ]=> (church-to-int (expt two five))
+1 ]=> (church->int (expt-church two five))
 
 ;Value: 32
+
+1 ]=> (church->int (int->church 5))
+
+;Value: 5
+
+1 ]=> (church->int (mult-church (int->church 7) (int->church 8)))
+
+;Value: 56
 ```

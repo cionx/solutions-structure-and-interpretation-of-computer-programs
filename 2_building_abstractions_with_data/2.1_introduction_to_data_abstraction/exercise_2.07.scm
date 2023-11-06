@@ -1,5 +1,3 @@
-(define (lower-bound x)
-  (car x))
+(define (lower-bound x) (car x))
 
-(define (upper-bound x)
-  (cdr x))
+(define (upper-bound x) (cdr x))

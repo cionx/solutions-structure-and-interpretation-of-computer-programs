@@ -7,7 +7,7 @@
 > ```
 > Define selectors `upper-bound` and `lower-bound` to complete the implementation.
 
-
+---
 
 The two selectors are as follows:
 ```scheme

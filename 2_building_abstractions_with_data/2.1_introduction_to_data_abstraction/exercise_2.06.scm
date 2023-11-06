@@ -18,24 +18,26 @@
 
 
 
-(define (add m n)
-  (lambda (f) (lambda (x) ((m f) ((n f) x)))))
+(define (add-church m n)
+  (lambda (f)
+    (lambda (x)
+      ((m f) ((n f) x)))))
 
-(define (mult m n)
-  (lambda (f) (lambda (x) ((m (n f)) x))))
+(define (mult-church m n)
+  (lambda (f) (m (n f))))
 
-(define (expt m n)
-  (lambda (f) (lambda (x) (((n m) f) x))))
+(define (expt-church m n)
+  (lambda (f) ((n m) f)))
 
 
 
-(define (int-to-church n)
+(define (int->church n)
   (define (repeated f n)
     (if (= n 0)
         (lambda (x) x)
         (lambda (x) ((repeated f (- n 1)) (f x)))))
-  (lamba (f) (repeated f n)))
+  (lambda (f) (repeated f n)))
 
-(define (church-to-int n)
+(define (church->int n)
   (define (inc x) (+ x 1))
   ((n inc) 0))

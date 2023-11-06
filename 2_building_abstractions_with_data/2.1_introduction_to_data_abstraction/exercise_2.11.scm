@@ -1,17 +1,47 @@
+(load "../../sicplib.scm")
+
 (define (mul-interval x y)
-  (cond (; one of the intervals is strictly non-negative
-         ((or (not (negative? (lower-bound x)))
-              (not (negative? (lower-bound y))))
-          (make-interval (* (lower-bound x) (lower-bound y))
-                         (* (upper-bound x) (upper-bound y))))
-         ; one of the intervals is strictly non-positive
-         ((or (not (positive? (upper-bound x)))
-              (not (positive? (upper-bound y))))
-          (make-interval (* (lower-bound x) (upper-bound y))
-                         (* (upper-bound x) (lower-bound y))))
-         ; both intervals have a neg. lower bound and pos. upper bound
-         (else (let ((p1 (* (upper-bound x) (upper-bound y)))
-                     (p2 (* (lower-bound x) (lower-bound y)))
-                     (n1 (* (upper-bound x) (lower-bound y)))
-                     (n2 (* (lower-bound x) (upper-bound y))))
-                 (make-interval (min n1 n2) (max p1 p2)))))))
+  (define (sign-interval z)
+    (cond ((<= 0 (lower-bound z)) 1)
+          ((<= (upper-bound z) 0) -1)
+          (else 0)))
+  (let ((x-sign (sign-interval x))
+        (y-sign (sign-interval y)))
+    (cond
+      ;; By commutativity of multiplication we may assume that
+      ;;    x-sign >= y-sign.
+      ;; Otherwise we swap the factors.
+      ((< x-sign y-sign)
+       (mul-interval y x))
+      ;; Both intervals are positive.
+      ((and (= x-sign 1) (= y-sign 1))
+       (make-interval (* (lower-bound x) (lower-bound y))
+                      (* (upper-bound x) (upper-bound y))))
+       ;; x is positive, y is mixed
+      ((and (= x-sign 1) (= y-sign 0))
+       (make-interval (* (upper-bound x) (lower-bound y))
+                      (* (upper-bound x) (upper-bound y))))
+      ;; x is positive, y is negative
+      ((and (= x-sign 1) (= y-sign -1))
+       (make-interval (* (upper-bound x) (lower-bound y))
+                      (* (lower-bound x) (upper-bound y))))
+      ;; x is mixed, y is mixed
+      ((and (= x-sign 0) (= y-sign 0))
+       (let ((p1 (* (lower-bound x) (lower-bound y)))
+             (p2 (* (lower-bound x) (upper-bound y)))
+             (p3 (* (upper-bound x) (lower-bound y)))
+             (p4 (* (upper-bound x) (upper-bound y))))
+         (make-interval (min p1 p2 p3 p4)
+                        (max p1 p2 p3 p4))))
+      ;; x is mixed, y is negative
+      ((and (= x-sign 0) (= y-sign -1))
+       (make-interval (* (upper-bound x) (lower-bound y))
+                      (* (lower-bound x) (lower-bound y))))
+      ;; x is negative, y is negative
+      ((and (= x-sign -1) (= y-sign -1))
+       (make-interval (* (upper-bound x) (upper-bound y))
+                      (* (lower-bound x) (lower-bound y))))
+      ;; We should never reach the following.
+      (else (error "Unknown sign combinatin in mult-interval"
+                   x-sign
+                   y-sign)))))
