@@ -1,14 +1,9 @@
-(define (accumulate op initial sequence)
-  (if (null? sequence)
-      initial
-      (op (car sequence)
-          (accumulate op initial (cdr sequence)))))
-
+(load "../../sicplib.scm") ; for `accumulate`
 
 
 (define (count-leaves tree)
-  (accumulate +
-              0
-              (map (lambda (t)
-                     (if (list? t) (count-leaves t) 1))
-                   tree)))
+  (define (leaf-number sub-tree)
+    (if (pair? sub-tree)
+        (count-leaves sub-tree)
+        1))
+  (accumulate + 0 (map leaf-number tree)))

@@ -26,7 +26,7 @@
 >
 > Use this notation to write a procedure `same-parity` that takes one or more integers and returns a list of all the arguments that have the same even-odd parity as the first argument.
 > For example,
-> ```scheme
+> ```text
 > (same-parity 1 2 3 4 5 6 7)
 > (1 3 5 7)
 >
@@ -34,22 +34,23 @@
 > (2 4 6)
 > ```
 
+---
 
+We use a generic procedure `filter` that filters out all items of a list that satisfy a specified predicate:
+```scheme
+(define (filter predicate seq)
+  (if (null? seq)
+      '()
+      (let ((head (car seq))
+            (filtered-tail (filter predicate (cdr seq))))
+        (if (predicate head)
+            (cons head filtered-tail)
+            filtered-tail))))
+```
 
-We write the described procedure `same-parity` as follows:
+We then choose this predicate as either `even?` or `odd?`, depending on the parity of the first element.
 ```scheme
 (define (same-parity x . items)
-  (define (iter correct-parity? items)
-    (if (null? items)
-        (list) ; empty list
-        (let ((head (car items))
-              (tail (cdr items)))
-          (let ((rest (iter correct-parity? tail)))
-            (if (correct-parity? head)
-                (cons head rest)
-                rest)))))
-  (cons x (iter (if (even? x)
-                    even?
-                    odd?)
-                items)))
+  (let ((correct-parity? (if (even? x) even? odd?)))
+    (cons x (filter correct-parity? items))))
 ```

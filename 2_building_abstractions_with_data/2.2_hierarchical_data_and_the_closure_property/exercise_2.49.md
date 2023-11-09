@@ -10,43 +10,47 @@
 >
 > 4. The `wave` painter.
 
+---
 
+### Preparation
 
 We start with an auxiliary procedure that transforms a list of numbers $x_1, y_1, x_2, y_2, …$ of even length into a list of vectors $(x_1, y_1), (x_2, y_2), …$:
 ```scheme
-(define (coords-to-vects coords)
-    (if (null? coords)
-        '()
-        (cons (make-vect (car coords)
-                         (cadr coords))
-              (coords-to-vects (cddr coords)))))
+(define (coords->vects coords)
+  (if (null? coords)
+      '()
+      (cons (make-vect (car coords)
+                       (cadr coords))
+            (coords->vects (cddr coords)))))
 ```
 We also define an auxiliary procedure that transforms a list of vectors $v_1, v_2, …$ into a list of segments $\overline{v_1 \, v_2 }, \overline{v_2 \, v_3}, …$.
 ```scheme
-(define (iter vects)
+  (define (vects->path vects)
     (if (null? (cdr vects))
         '()
         (cons (make-segment (car vects)
                             (cadr vects))
-              (iter (cdr vects)))))
+              (vects->path (cdr vects)))))
 ```
-More precisely, we have a procedure `make-path` that has `coords-to-vects` and `iter` as sub-procedures, and simply combines the two of them:
+We combine both of these procedures into a procedure `make-path` that transforms a list of coordinates into a path.
 ```scheme
 (define (make-path coords)
-  (define (coords-to-vects coords)
+  (define (coords->vects coords)
     (if (null? coords)
         '()
         (cons (make-vect (car coords)
                          (cadr coords))
-              (coords-to-vects (cddr coords)))))
-  (define (iter vects)
+              (coords->vects (cddr coords)))))
+  (define (vects->path vects)
     (if (null? (cdr vects))
         '()
         (cons (make-segment (car vects)
                             (cadr vects))
-              (iter (cdr vects)))))
-  (iter (coords-to-vects coords)))
+              (vects->path (cdr vects)))))
+  (vects->path (coords->vects coords)))
 ```
+
+### Outline, X, diamond
 
 We can now implement the first three painters as follows:
 ```scheme
@@ -71,6 +75,8 @@ We can now implement the first three painters as follows:
                                       0.5 0.0))))
 ```
 
+### Wave
+
 The painter `wave` needs a bit more work.
 
 To figure out the correct coordinates we used a digitized version of Figure 2.10, where the image drawn by `wave` (without any distortions) has a resolution of $1000 × 1000$ pixels.
@@ -94,9 +100,9 @@ We get overall the following code:
         (bottom-right (make-path (list 1.00 0.15
                                        0.60 0.45
                                        0.75 0.00)))
-        (bottom (make-path (list 0.60 0.00
-                                 0.50 0.30
-                                 0.40 0.00)))
+        (bottom-center (make-path (list 0.60 0.00
+                                        0.50 0.30
+                                        0.40 0.00)))
         (bottom-left (make-path (list 0.25 0.00
                                       0.35 0.50
                                       0.30 0.60
@@ -105,6 +111,6 @@ We get overall the following code:
     (segments->painter (append top-left
                                top-right
                                bottom-right
-                               bottom
+                               bottom-center
                                bottom-left))))
 ```

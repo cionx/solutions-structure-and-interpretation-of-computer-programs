@@ -17,7 +17,7 @@
 > Explain why this interchange makes the program run slowly.
 > Estimate how long it will take Louis’s program to solve the eight-queens puzzle, assuming that the program in Exercise 2.42 solves the puzzle in time $T$.
 
-
+---
 
 To evaluate the code
 ```scheme
@@ -32,7 +32,7 @@ During each of these applications, the value of `(queen-cols (- k 1))` will be c
 
 ---
 
-We have tried lots of estimates for finding out how much longer Louis will have to wait, but they all fail.
+We have tried different of estimates for finding out how much longer Louis will have to wait, but they all fail.
 The following is the best we have, which is just a huge mess.
 
 ---
@@ -221,7 +221,7 @@ For `(queens 12)` mit-scheme informs us that it’s “out of memory” (even th
 ---
 
 We have looked for solutions to this problem online, but found only contradictory and (mainly) incomplete answers.
-We can find all of the following answers:
+We found the following answers:
 
 - The naive factor of $n^n$, which is $16777216$ for $n = 8$.
   - https://www.timwoerner.de/posts/sicp/exercises/2/43/ (Tim Wörner)

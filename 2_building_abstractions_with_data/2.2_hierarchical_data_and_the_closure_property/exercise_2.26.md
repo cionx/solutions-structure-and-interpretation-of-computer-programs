@@ -16,10 +16,10 @@
 > (list x y)
 > ```
 
-
+---
 
 The expression `(append x y)` will result in `(1 2 3 4 5 6)`, the expression `cons x y` will result in `((1 2 3) 4 5 6)`, and the expression `(list x y)` will result in `((1 2 3) (4 5 6))`.
-We can verify these claims in `mit-scheme`:
+We can verify these claims with `mit-scheme`:
 ```text
 1 ]=> (append x y)
 

@@ -11,7 +11,7 @@
 > \end{aligned}
 > $$
 
-
+---
 
 The constructor and selectors can be written as follows:
 ```scheme

@@ -26,9 +26,7 @@
 >          (flatmap
 >           (lambda (rest-of-queens)
 >             (map (lambda (new-row)
->                    (adjoin-position new-row
->                                     k
->                                     rest-of-queens))
+>                    (adjoin-position new-row k rest-of-queens))
 >                  (enumerate-interval 1 board-size)))
 >           (queen-cols (- k 1))))))
 >   (queen-cols board-size))
@@ -39,9 +37,9 @@
 > You must also write the procedure `safe?`, which determines for a set of positions, whether the queen in the $k$th column is safe with respect to the others.
 > (Note that we need only check whether the new queen is safe---the other queens are already guaranteed safe with respect to each other.)
 
+---
 
-
-We start by defining a constructor and selectors for queens:
+We start by defining a constructor and selectors for queens, which are represented by their positions.
 ```scheme
 (define (make-queen row column)
   (cons row column))
@@ -52,8 +50,9 @@ We start by defining a constructor and selectors for queens:
 (define (queen-column q)
   (cdr q))
 ```
-A position is simply a list of queens.
-For the empty board, there is exactly one position, and we can add a new queen to a position via `cons`:
+A configuration is simply a list of queens.
+For the empty board, there is exactly one configuration.
+We can add a new queen to a configuration via `cons`:
 ```scheme
 (define empty-board '())
 

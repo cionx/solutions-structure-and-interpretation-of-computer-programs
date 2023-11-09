@@ -11,7 +11,7 @@
 >         (append rest (map ⟨??⟩ rest)))))
 > ```
 
-
+---
 
 We replace `nil` (which is non-standard, and for example not supported by mit-scheme 12.1), by `'()`.
 
@@ -41,8 +41,8 @@ $$
   \begin{aligned}
   \mathcal{P}(S)
   &= \mathcal{P}_{x, 0}(S) \amalg \mathcal{P}_{x, 1}(S) \\
-  &= \mathcal{P}_{x, 0}(S) \amalg \{ T ∪ \{ x \} \mid T ∈ \mathcal{P}_{x, 0}(S) \} \\
-  &= \mathcal{P}(S ∖ x) \amalg \{ T ∪ \{ x \} \mid T ∈ \mathcal{P}(S ∖ x) \} \,. \\
+  &= \mathcal{P}_{x, 0}(S) \amalg \bigl\{ T ∪ \{ x \} \mid T ∈ \mathcal{P}_{x, 0}(S) \bigr\} \\
+  &= \mathcal{P}(S ∖ x) \amalg \bigl\{ T ∪ \{ x \} \mid T ∈ \mathcal{P}(S ∖ x) \bigr\} \,.
   \end{aligned}
 $$
 
@@ -50,14 +50,14 @@ This calculation tells us how the power set of $S$ can be computed from the powe
 We can repeat this process until we are left with computing the power set of the empty set.
 But this power set is simply $\{ ∅ \}$.
 
-This procedure is implemented by the following procedure:
+This approach is implemented by the following procedure:
 ```scheme
-(define (subsets s)
-  (if (null? s)
+(define (subsets set)
+  (if (null? set)
       (list '())
-      (let ((rest (subsets (cdr s))))
-        (append rest
-                (map (lambda (t)
-                       (cons (car s) t))
-                     rest)))))
+      (let ((x (car set))
+            (not-containing-x (subsets (cdr set))))
+        (append not-containing-x
+                (map (lambda (subset) (cons x subset))
+                     not-containing-x)))))
 ```

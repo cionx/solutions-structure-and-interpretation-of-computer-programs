@@ -6,9 +6,7 @@
 > The values returned by applying the procedure to the elements are not used at all---`for-each` is used with procedures that perform an action, such as printing.
 > For example,
 > ```scheme
-> (for-each (lambda (x)
->             (newline)
->             (display x))
+> (for-each (lambda (x) (newline) (display x))
 >           (list 57 321 88))
 > 57
 > 321
@@ -17,7 +15,7 @@
 > The value returned by the call to `for-each` (not illustrated above) can be something arbitrary, such as true.
 > Give an implementation of `for-each`.
 
-
+---
 
 We can implement the procedure `for-each` as follows:
 ```scheme

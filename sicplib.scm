@@ -135,26 +135,7 @@
 
 
 
-
-
-
-
-
-
-(define (prime-sum? pair)
-  (prime? (+ (car pair) (cadr pair))))
-
-(define (accumulate op initial sequence)
-  (if (null? sequence)
-      initial
-      (op (car sequence)
-          (accumulate op initial (cdr sequence)))))
-
-(define (accumulate-n op init seqs)
-  (if (null? (car seqs))
-      '()
-      (cons (accumulate op init (map car seqs))
-            (accumulate-n op init (map cdr seqs)))))
+;;; 2.2.3 Sequences as Conventional Interfaces
 
 (define (filter predicate sequence)
   (cond ((null? sequence) '())
@@ -163,18 +144,37 @@
                (filter predicate (cdr sequence))))
         (else (filter predicate (cdr sequence)))))
 
-(define (flatmap proc seq)
-  (accumulate append '() (map proc seq)))
+(define (accumulate op initial sequence)
+  (if (null? sequence)
+      initial
+      (op (car sequence)
+          (accumulate op initial (cdr sequence)))))
 
 (define (enumerate-interval low high)
   (if (> low high)
       '()
       (cons low (enumerate-interval (+ low 1) high))))
 
+(define (accumulate-n op init seqs)
+  (if (null? (car seqs))
+      '()
+      (cons (accumulate op init (map car seqs))
+            (accumulate-n op init (map cdr seqs)))))
+
+(define (flatmap proc seq)
+  (accumulate append '() (map proc seq)))
+
+(define (prime-sum? pair)
+  (prime? (+ (car pair) (cadr pair))))
+
 (define (make-pair-sum pair)
   (list (car pair)
         (cadr pair)
         (+ (car pair) (cadr pair))))
+
+
+
+
 
 
 ;;; Section 2.3; Data-directed Programming and Additivity

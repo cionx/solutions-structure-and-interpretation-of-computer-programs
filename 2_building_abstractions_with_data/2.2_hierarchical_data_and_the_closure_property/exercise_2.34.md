@@ -24,9 +24,9 @@
 > (horner-eval 2 (list 1 3 0 5 0 1))
 > ```
 
+---
 
-
-We can use the following code:
+As `accumulate` is right-associative, we can use the following code:
 ```scheme
 (define (horner-eval x coefficient-sequence)
   (accumulate (lambda (this-coeff higher-terms)

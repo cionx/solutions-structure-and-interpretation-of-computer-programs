@@ -9,17 +9,21 @@
 >   (fold-left (lambda (x y) ⟨??⟩) nil sequence))
 > ```
 
+---
 
-
-We can use the following code:
+With `fold-right` we can proceed as follows:
 ```scheme
 (define (reverse sequence)
-  (fold-right (lambda (x rest) (append rest (list x)))
+  (fold-right (lambda (x rest-reversed)
+                (append rest-reversed (list x)))
               '()
               sequence))
-
+```
+With `fold-left` we can proceed as follows:
+```scheme
 (define (reverse sequence)
-  (fold-left (lambda (previous x) (cons x previous))
+  (fold-left (lambda (previous-reversed x)
+               (cons x previous-reversed))
              '()
              sequence))
 ```

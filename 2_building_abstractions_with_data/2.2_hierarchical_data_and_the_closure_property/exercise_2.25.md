@@ -9,6 +9,7 @@
 > (1 (2 (3 (4 (5 (6 7))))))
 > ```
 
+---
 
 For the list `(1 3 (5 7) 9` we can use the following combination:
 ```scheme
@@ -20,7 +21,7 @@ For the list `((7))` we can use the following combination, or its short form:
 
 (caar ⟨list⟩)
 ```
-For the list `(1 (2 (3 (4 (5 (6 7))))))` we can use the following combination, and its slightly shorter form::
+For the list `(1 (2 (3 (4 (5 (6 7))))))` we can use the following combination, and its slightly shorter forms:
 ```scheme
 (car (cdr (car (cdr (car (cdr (car (cdr (car (cdr (car (cdr ⟨list⟩))))))))))))
 

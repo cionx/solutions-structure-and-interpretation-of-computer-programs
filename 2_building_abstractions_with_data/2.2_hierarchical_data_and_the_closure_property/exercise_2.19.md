@@ -1,6 +1,6 @@
 # Exercise 2.19
 
-> Consider the change-counting program of Section 1.2.2.
+> Consider the change-counting program of section 1.2.2.
 > It would be nice to be able to easily change the currency used by the program, so that we could compute the number of ways to change a British pound, for example.
 > As the program is written, the knowledge of the currency is distributed partly into the procedure `first-denomination` and partly into the procedure `count-change` (which knows that there are five kinds of U.S. coins).
 > It would be nicer to be able to supply a list of coins to be used for making change.
@@ -34,7 +34,7 @@
 > Does the order of the list `coin-values` affect the answer produced by `cc`?
 > Why or why not?
 
-
+---
 
 We can define the required procedures as follows:
 ```scheme
@@ -51,7 +51,8 @@ We can define the required procedures as follows:
 The procedure `cc` is based on the following mathematics:
 
 > Given a real number $x$ and a set $S$ of positive real numbers, let $C(x, S)$ be the number of ways of writing $x$ as a sum of elements of $S$.
-More precisely, $C(x, S)$ is the number of functions $f \colon S \to ℕ_0$ satisfying the condition $x = \sum_{s ∈ S} f(s) s$.
+  (For example, $C(100, \{ 50, 25, 10, 5, 1 \}) = 292$.)
+> More precisely, $C(x, S)$ is defined as the number of functions $f \colon S \to ℕ_0$ satisfying the condition $x = \sum_{s ∈ S} f(s) s$.
 >
 > The following boundary conditions hold:
 >
@@ -61,8 +62,8 @@ More precisely, $C(x, S)$ is the number of functions $f \colon S \to ℕ_0$ sati
 >
 > - $C(x, ∅) = 0$ if $x$ is nonzero.
 >
-> For every element $s$ of $S$, the following recursive relation holds:
+> For every element $s$ of $S$, the following recursion relation holds:
 >
-> - $C(x, S) = C(x - s, S) + C(x, S ∖ s)$.
+> - $C(x, S) = C(x - s, S) + C(x, S ∖ \{ s \})$.
 
-The order of the list `coin-values` doesn’t matter, since in the mathematical formulation we are dealing with a set, which imposes no order on its elements.
+The order of the list `coin-values` doesn’t matter since in the mathematical formulation we are dealing with a set, which imposes no order on its elements.

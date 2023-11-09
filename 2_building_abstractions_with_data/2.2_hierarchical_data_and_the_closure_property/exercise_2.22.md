@@ -28,11 +28,10 @@
 > This doesn’t work either.
 > Explain.
 
-
+---
 
 ### First implementation
 
-This is because lists are a first-in-last-out data structure.
 The earlier we retrieve an item from `things`, the further behind its square will be placed in `answer`.
 
 ```text

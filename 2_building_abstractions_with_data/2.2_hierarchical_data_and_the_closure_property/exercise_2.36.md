@@ -12,9 +12,9 @@
 >             (accumulate-n op init ⟨??⟩))))
 > ```
 
+---
 
-
-After replacing `nil` with `'()`, we can fill out the missing parts of the procedure with `map`:
+After replacing `nil` with `'()`, we can fill out the missing parts of the procedure with the help of `map`:
 ```scheme
 (define (accumulate-n op init seqs)
   (if (null? (car seqs))

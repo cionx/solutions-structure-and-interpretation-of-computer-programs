@@ -1,8 +1,8 @@
-(define (subsets s)
-  (if (null? s)
+(define (subsets set)
+  (if (null? set)
       (list '())
-      (let ((rest (subsets (cdr s))))
-        (append rest
-                (map (lambda (t)
-                       (cons (car s) t))
-                     rest)))))
+      (let ((x (car set))
+            (not-containing-x (subsets (cdr set))))
+        (append not-containing-x
+                (map (lambda (subset) (cons x subset))
+                     not-containing-x)))))

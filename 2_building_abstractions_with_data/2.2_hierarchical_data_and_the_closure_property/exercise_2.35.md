@@ -6,14 +6,14 @@
 >   (accumulate ⟨??⟩ ⟨??⟩ (map ⟨??⟩ ⟨??⟩)))
 > ```
 
+---
 
-
-We can complete the code as follows:
+We replace each direct sub-tree by its number of leaves via `map`, and then add together the resulting list of numbers via `accumulate`.
 ```scheme
 (define (count-leaves tree)
-  (accumulate +
-              0
-              (map (lambda (t)
-                     (if (list? t) (count-leaves t) 1))
-                   tree)))
+  (define (leaf-number sub-tree)
+    (if (pair? sub-tree)
+        (count-leaves sub-tree)
+        1))
+  (accumulate + 0 (map leaf-number tree)))
 ```

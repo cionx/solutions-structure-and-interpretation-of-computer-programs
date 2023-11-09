@@ -7,13 +7,12 @@
 
 
 (define (split first second)
-  (define (transform painter n)
-    (if (<= n 0)
+  (define (transformation painter n)
+    (if (= n 0)
         painter
-        (let ((previous (transform painter (- n 1))))
-          (first painter
-                 (second previous previous)))))
-  transform)
+        (let ((smaller (transformation painter (- n 1))))
+          (first painter (second smaller smaller)))))
+  transformation)
 
 
 

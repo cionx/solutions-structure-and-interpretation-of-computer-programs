@@ -39,18 +39,31 @@
 >     (map ⟨??⟩ m)))
 > ```
 
+---
 
-
-We can fill out the missing code pieces as follows:
+Suppose that an $(m × n)$-matrix $A$ has row vectors $a_1, \dotsc, a_m$.
+Given a column vector $x$ of size $n$, we can form the product $A x$.
+The $i$-th entry of this product is the matrix product $a_i x$ (a row vector times a column vector, which gives a scalar), which can equivalently be described as the dot-product of the transpose of $a_i$ with $x$, i.e., the product $a_i^{\mathsf{t}} ⋅ x$.
+We do not distinguish between row vectors and column vectors, and can therefore implement matrix-vector-multiplication as follows:
 ```scheme
 (define (matrix-*-vector m v)
-  (map (lambda (row)
-         (dot-product row v))
+  (map (lambda (row) (dot-product row v))
        m))
+```
 
+We can compute the $i$th row of the transpose $A^{\mathsf{t}}$ by combining the $i$th column of $A$ into a list.
+We hence combine the rows of $A$ via `accumulate-n` and `cons`.
+```scheme
 (define (transpose mat)
   (accumulate-n cons '() mat))
+```
 
+Lastly, to implement matrix-matrix-multiplication, suppose that $A$ and $B$ are two matrices such that $A B$ is defined (i.e., the width of $A$ equals the height of $B$).
+If $a_1, \dotsc, a_m$ are the rows of $A$, then the $i$-th row of $AB$ is the vector-matrix-product $a_i B$.
+As we do not distinguish between row vectors and column vectors, we can compute the row vector $a_i B$ as the column vector $(a_i B)^{\mathsf{t}} = B^{\mathsf{t}} a_i^{\mathsf{t}}$.
+This means that we multiply $B^{\mathsf{t}}$ and $a_i$ via the procedure `matrix-*-vector`.
+
+```scheme
 (define (matrix-*-matrix m n)
   (let ((cols (transpose n)))
     (map (lambda (row) (matrix-*-vector cols row)) m)))

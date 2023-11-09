@@ -12,17 +12,15 @@
 > (1 2 3 4 1 2 3 4)
 > ```
 
-
+---
 
 A basic implementation is as follows:
 ```scheme
-(define (frindge tree)
-  (define (no-list? input)
-    (not (list? input)))
-  (cond ((no-list? tree) (list tree))
-        ((null? tree) (list))
-        (else (append (frindge (car tree))
-                      (frindge (cdr tree))))))
+(define (fringe tree)
+  (cond ((null? tree) '()) ; '() is the empty list
+        ((not (pair? tree)) (list tree)) ; leaf case
+        (else (append (fringe (car tree))
+                      (fringe (cdr tree))))))
 ```
 However, the complexity of this procedure is $Θ(n^2)$ where $n$ is the number of leaves of the input;
 this worst-case performance is reached by considering the following tree:
@@ -33,15 +31,13 @@ this worst-case performance is reached by considering the following tree:
 The following procedure has a complexity of only $Θ(n)$.
 It works its way through the input tree from the right to left, and adds newly found leaves to the beginning of the already constructed list.
 ```scheme
-(define (frindge tree)
-  (define (no-list? input)
-    (not (list? input)))
-  (define (combine subtree right-frindge)
-    (cond ((null? subtree) right-frindge)
-          ((no-list? subtree) (cons subtree right-frindge))
-          (else (combine (car subtree)
-                         (combine (cdr subtree) right-frindge)))))
-  (combine tree (list)))
+(define (fringe tree)
+  (define (extend-fringe subtree right-fringe)
+    (cond ((null? subtree) right-fringe)
+          ((not (pair? subtree)) (cons subtree right-fringe))
+          (else (extend-fringe (car subtree)
+                               (extend-fringe (cdr subtree) right-fringe)))))
+  (extend-fringe tree '())) ; '() is the empty list
 ```
 
 Both implementations treat non-list values as trees consisting of a single vertex.

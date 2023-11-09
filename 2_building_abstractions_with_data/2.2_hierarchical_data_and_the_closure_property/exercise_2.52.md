@@ -10,6 +10,8 @@
 > 3. Modify the version of `square-limit` that uses `square-of-four` so as to assemble the corners in a different pattern.
 >    (For example, you might make the big Mr.~Rogers look outward from each corner of the square.)
 
+---
+
 
 
 ### 1.
@@ -17,19 +19,19 @@
 We reuse the auxiliary procedure `make-path` from Exercise 2.49:
 ```scheme
 (define (make-path coords)
-  (define (coords-to-vects coords)
+  (define (coords->vects coords)
     (if (null? coords)
         '()
         (cons (make-vect (car coords)
                          (cadr coords))
-              (coords-to-vects (cddr coords)))))
+              (coords->vects (cddr coords)))))
   (define (iter vects)
     (if (null? (cdr vects))
         '()
         (cons (make-segment (car vects)
                             (cadr vects))
               (iter (cdr vects)))))
-  (iter (coords-to-vects coords)))
+  (iter (coords->vects coords)))
 ```
 We modify `wave` by adding a face:
 ```scheme
@@ -56,9 +58,9 @@ We modify `wave` by adding a face:
         (bottom-right (make-path (list 1.00 0.15
                                        0.60 0.45
                                        0.75 0.00)))
-        (bottom (make-path (list 0.60 0.00
-                                 0.50 0.30
-                                 0.40 0.00)))
+        (bottom-center (make-path (list 0.60 0.00
+                                        0.50 0.30
+                                        0.40 0.00)))
         (bottom-left (make-path (list 0.25 0.00
                                       0.35 0.50
                                       0.30 0.60
@@ -70,7 +72,7 @@ We modify `wave` by adding a face:
                                right-eye
                                top-right
                                bottom-right
-                               bottom
+                               bottom-center
                                bottom-left))))
 ```
 The resulting image is as follows:
@@ -103,7 +105,7 @@ The resulting image looks as follows:
 
 ### 3.
 
-Wo can arrange the courners in a rotated way:
+We can arrange the corners in a rotated way:
 ```scheme
 (define (new-square-limit painter n)
   (let ((combine4 (square-of-four rotate90 identity

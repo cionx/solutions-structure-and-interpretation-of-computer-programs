@@ -1,8 +1,8 @@
 (define (reverse items)
-  (define (iter input acc)
-    (if (null? input)
-        acc
-        (let ((head (car input))
-              (tail (cdr input)))
-          (iter tail (cons head acc)))))
-  (iter items (list )))
+  (define (iter seq rev-seq)
+    (if (null? seq)
+        rev-seq
+        (let ((head (car seq))
+              (tail (cdr seq)))
+          (iter tail (cons head rev-seq)))))
+  (iter items '())) ; '() is the empty list

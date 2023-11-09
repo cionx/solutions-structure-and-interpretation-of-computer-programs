@@ -1,7 +1,7 @@
 # Exercise 2.21
 
 > The procedure `square-list` takes a list of numbers as argument and returns a list of the squares of those numbers.
-> ```scheme
+> ```text
 > (square-list (list 1 2 3 4))
 > (1 4 9 16)
 > ```
@@ -17,16 +17,18 @@
 >   (map ⟨??⟩ ⟨??⟩))
 > ```
 
+---
 
-
-We can fill out the two implementations of `square-list` as follows:
+The first implementation can be filled out as follows:
 ```scheme
 (define (square-list items)
   (if (null? items)
-      nil
+      '()
       (cons (square (car items))
-            (square-list cdr items))))
-
+            (square-list (cdr items)))))
+```
+The second implementation can be filled out as follows:
+```scheme
 (define (square-list items)
   (map square items))
 ```

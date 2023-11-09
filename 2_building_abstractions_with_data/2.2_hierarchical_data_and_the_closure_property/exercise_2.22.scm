@@ -17,8 +17,3 @@
               (cons answer
                     (square (car things))))))
   (iter items nil))
-
-
-
-(define (square x)
-  (* x x))

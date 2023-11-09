@@ -8,21 +8,20 @@
 > ```
 > produces procedures `right-split` and `up-split` with the same behaviors as the ones already defined.
 
+---
 
-
-We can use the following code:
+We can implement the desired procedure as follows:
 ```scheme
 (define (split first second)
-  (define (transform painter n)
-    (if (<= n 0)
+  (define (transformation painter n)
+    (if (= n 0)
         painter
-        (let ((previous (transform painter (- n 1))))
-          (first painter
-                 (second previous previous)))))
-  transform)
+        (let ((smaller (transformation painter (- n 1))))
+          (first painter (second smaller smaller)))))
+  transformation)
 ```
 
-This code can be tested in DrRacket with the SICP Collections (https://docs.racket-lang.org/sicp-manual/index.html) installed.
+This code can be tested in DrRacket with the SICP Collections (https://docs.racket-lang.org/sicp-manual/index.html) installed:
 ```scheme
 (define right-split (split beside below))
 (define up-split (split below beside))

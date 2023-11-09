@@ -3,7 +3,7 @@
 > Define a procedure `unique-pairs` that, given an integer $n$, generates the sequence of pair $(i, j)$ with $1 ≤ j < i ≤ n$.
 > Use `unique-pairs` to simplify the definition of `prime-sum-pairs` given above.
 
-
+---
 
 We can implement the described procedure `unique-pairs` as follows:
 ```scheme

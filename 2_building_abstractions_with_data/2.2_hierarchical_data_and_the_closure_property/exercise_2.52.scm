@@ -4,20 +4,24 @@
 #lang sicp
 (#%require sicp-pict)
 
+
+
+;;; A bunch of preliminary stuff
+
 (define (make-path coords)
-  (define (coords-to-vects coords)
+  (define (coords->vects coords)
     (if (null? coords)
         '()
         (cons (make-vect (car coords)
                          (cadr coords))
-              (coords-to-vects (cddr coords)))))
-  (define (iter vects)
+              (coords->vects (cddr coords)))))
+  (define (vects->path vects)
     (if (null? (cdr vects))
         '()
         (cons (make-segment (car vects)
                             (cadr vects))
-              (iter (cdr vects)))))
-  (iter (coords-to-vects coords)))
+              (vects->path (cdr vects)))))
+  (vects->path (coords->vects coords)))
 
 (define wave
   (let ((top-left (make-path (list 0.00 0.85
@@ -34,9 +38,9 @@
         (bottom-right (make-path (list 1.00 0.15
                                        0.60 0.45
                                        0.75 0.00)))
-        (bottom (make-path (list 0.60 0.00
-                                 0.50 0.30
-                                 0.40 0.00)))
+        (bottom-center (make-path (list 0.60 0.00
+                                        0.50 0.30
+                                        0.40 0.00)))
         (bottom-left (make-path (list 0.25 0.00
                                       0.35 0.50
                                       0.30 0.60
@@ -45,7 +49,7 @@
     (segments->painter (append top-left
                                top-right
                                bottom-right
-                               bottom
+                               bottom-center
                                bottom-left))))
 
 (define (identity x) x)
@@ -112,9 +116,9 @@
         (bottom-right (make-path (list 1.00 0.15
                                        0.60 0.45
                                        0.75 0.00)))
-        (bottom (make-path (list 0.60 0.00
-                                 0.50 0.30
-                                 0.40 0.00)))
+        (bottom-center (make-path (list 0.60 0.00
+                                        0.50 0.30
+                                        0.40 0.00)))
         (bottom-left (make-path (list 0.25 0.00
                                       0.35 0.50
                                       0.30 0.60
@@ -126,7 +130,7 @@
                                right-eye
                                top-right
                                bottom-right
-                               bottom
+                               bottom-center
                                bottom-left))))
 
 ;;; Second modification

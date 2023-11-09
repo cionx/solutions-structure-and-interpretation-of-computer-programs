@@ -15,25 +15,25 @@
 > ((4 3) (2 1))
 > ```
 
-
+---
 
 We can implement `deep-reverse` as a combination of `reverse` and `map` as follows:
 ```scheme
 (define (deep-reverse items)
-  (if (list? items)
+  (if (pair? items)
       (reverse (map deep-reverse items))
       items))
 ```
 
-Alternatively, we could implement `deep-reverse` by modifying our code for `reverse` from Exercise 2.18:
+Alternatively, we can implement `deep-reverse` by modifying our code for `reverse` from Exercise 2.18:
 ```scheme
 (define (deep-reverse items)
-  (define (iter input acc)
-    (if (null? input)
-        acc
-        (iter (cdr input)
-              (cons (deep-reverse (car input))
-                    acc))))
+  (define (iter seq accum)
+    (if (null? seq)
+        accum
+        (iter (cdr seq)
+              (cons (deep-reverse (car seq))
+                    accum))))
   (if (list? items)
       (iter items (list))
       items))

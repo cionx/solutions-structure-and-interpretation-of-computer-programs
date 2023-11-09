@@ -11,22 +11,23 @@
 > ```
 > Define `square-tree` both directly (i.e., without using any higher-order procedures) and also by using `map` and recursion.
 
-
+---
 
 A direct implementation is as follows:
 ```scheme
 (define (square-tree tree)
-  (cond ((null? tree) (list))
-        ((list? tree)
-         (cons (square-tree (car tree))
-               (square-tree (cdr tree))))
-        (else (square tree))))
+  (cond ((null? tree) '())
+        ((not (pair? tree)) (square tree))
+        (else (cons (square-tree (car tree))
+                    (square-tree (cdr tree))))))
 ```
 
-The following is an implementation using `map` and recursion:
+The following is an implementation using `map`:
 ```scheme
 (define (square-tree tree)
-  (if (list? tree)
-      (map square-tree tree)
-      (square tree)))
+  (map (lambda (sub-tree)
+         (if (pair? sub-tree)
+             (square-tree sub-tree)
+             (square sub-tree)))
+       tree))
 ```

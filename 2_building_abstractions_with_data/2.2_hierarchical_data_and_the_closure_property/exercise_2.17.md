@@ -6,14 +6,21 @@
 > (34)
 > ```
 
+---
 
+We split up the input list into two parts:
+its _head_ (its first element) and its _tail_ (the rest of the list).
+If the tail is empty, then we return the list that consists only of the head.
+Otherwise, we recursively descend into the tail.
+
+We also check if the original input list in nonempty, and throw an error otherwise.
 
 We can write the described procedure `last-pair` as follows:
 ```scheme
 (define (last-pair items)
-  (define (iter input)
-    (let ((head (car input))
-          (tail (cdr input)))
+  (define (iter seq)
+    (let ((head (car seq))
+          (tail (cdr seq)))
       (if (null? tail)
           (list head)
           (last-pair tail))))

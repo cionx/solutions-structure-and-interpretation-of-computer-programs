@@ -1,3 +1,5 @@
+;;; Exercise 2.46
+
 (define (make-vect x y)
   (list x y))
 
@@ -23,6 +25,10 @@
   (make-vect (* scalar (xcor-vect v))
              (* scalar (ycor-vect v))))
 
+
+
+;;; Exercise 2.48
+
 (define (make-segment start end)
   (list start end))
 
@@ -47,26 +53,26 @@
 
 ;;; The following code can be tested in DrRacket with the SICP Collections
 ;;; (https://docs.racket-lang.org/sicp-manual/index.html) installed.
-;;; It will use an internal version of sigments->painter instead of the above
+;;; It will use an internal version of segments->painter instead of the above
 ;;; one, so don’t copy the above code!
 
 #lang sicp
 (#%require sicp-pict)
 
 (define (make-path coords)
-  (define (coords-to-vects coords)
+  (define (coords->vects coords)
     (if (null? coords)
         '()
         (cons (make-vect (car coords)
                          (cadr coords))
-              (coords-to-vects (cddr coords)))))
-  (define (iter vects)
+              (coords->vects (cddr coords)))))
+  (define (vects->path vects)
     (if (null? (cdr vects))
         '()
         (cons (make-segment (car vects)
                             (cadr vects))
-              (iter (cdr vects)))))
-  (iter (coords-to-vects coords)))
+              (vects->path (cdr vects)))))
+  (vects->path (coords->vects coords)))
 
 (define outline
   (segments->painter (make-path (list 0 0
@@ -103,9 +109,9 @@
         (bottom-right (make-path (list 1.00 0.15
                                        0.60 0.45
                                        0.75 0.00)))
-        (bottom (make-path (list 0.60 0.00
-                                 0.50 0.30
-                                 0.40 0.00)))
+        (bottom-center (make-path (list 0.60 0.00
+                                        0.50 0.30
+                                        0.40 0.00)))
         (bottom-left (make-path (list 0.25 0.00
                                       0.35 0.50
                                       0.30 0.60
@@ -114,7 +120,7 @@
     (segments->painter (append top-left
                                top-right
                                bottom-right
-                               bottom
+                               bottom-center
                                bottom-left))))
 
 ;;; Testing the procedures

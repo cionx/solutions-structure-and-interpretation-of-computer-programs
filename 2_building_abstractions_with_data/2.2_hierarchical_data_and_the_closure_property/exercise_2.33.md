@@ -12,7 +12,7 @@
 >   (accumulate ⟨??⟩ 0 sequence))
 > ```
 
-
+---
 
 The procedure `accumulate` works in a right-associative way.
 Keeping that in mind, we can express the three listed operations as follows:

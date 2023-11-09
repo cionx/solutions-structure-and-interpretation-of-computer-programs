@@ -23,7 +23,7 @@
 > ```
 > Give a property that `op` should satisfy to guarantee that `fold-right` and `fold-left` will produce the same values for any sequence.
 
-
+---
 
 The first expression evaluates as follows:
 ```scheme
@@ -103,4 +103,4 @@ The fourth expression evaluates as follows:
 (((() 1) 2) 3)
 ```
 
-If the operation `op` as associative and the value `initial` is central with respect to `op` (i.e., `op initial x` and `op x initial` are equal for every `x`), then `(fold-left op initial sequence)` and `(fold-right op initial sequence)` are equal for every list `sequence`.
+If the operation `op` as associative and the value `initial` is central with respect to `op` (i.e., `(op initial x)` and `(op x initial)` are equal for every `x`), then `(fold-left op initial sequence)` and `(fold-right op initial sequence)` are equal for every list `sequence`.

@@ -28,6 +28,8 @@
 >    ```
 >    How much do you need to change your programs to convert to the new representation?
 
+---
+
 
 
 ### 1.
@@ -50,10 +52,10 @@ We can implement these selectors as follows:
 To make the upcoming code cleaner, we also introduce the following additional predicates and selectors:
 ```scheme
 (define (mobile? structure)
-  (list? structure))
+  (pair? structure))
 
 (define (weight? structure)
-  (not (mobile? structure)))
+  (number? structure))
 
 (define (left-structure mobile)
   (branch-structure (left-branch mobile)))
@@ -65,36 +67,46 @@ Note that only `mobile?` relies on the internal representation of mobiles;
 the other three procedures are implemented purely in terms of earlier predicates and selectors.
 
 
+
 ### 2.
 
-We can write this procedure as follows:
+We write our procedure so that it determines the (total) weight of a structure, not just a mobile.
 ```scheme
-(define (total-weight mobile)
-  (define (structure-weight structure)
-    (if (mobile? structure)
-        (total-weight structure)
-        structure))
-  (+ (structure-weight (left-structure mobile))
-     (structure-weight (right-structure mobile))))
+(define (total-weight structure)
+  (if (mobile? structure)
+      (+ (total-weight (left-structure structure))
+         (total-weight (right-structure structure)))
+      structure))
 ```
 
 
 
 ### 3.
 
-We can write this procedure as follows:
+We use an auxiliary procedure to determine the torque of a branch:
 ```scheme
-(define (balanced? structure)
-  (define (branch-torque branch)
-    (* (branch-length branch)
-       (total-weight (branch-structure branch))))
-  (define (same-torque? mobile)
+(define (branch-torque branch)
+  (* (branch-length branch)
+     (total-weight (branch-structure branch))))
+```
+
+We say that a mobile is _top balanced_ if the torque of its left branch equals that of its right branch.
+```scheme
+(define (top-balanced? mobile)
     (= (branch-torque (left-branch mobile))
        (branch-torque (right-branch mobile))))
-  (or (weight? structure)
-      (and (same-torque? structure)
+```
+
+We also define any weight to be balanced.
+The condition “balanced” is thus defined for all structures, and automatically satisfied for weights.
+A mobile is balanced if and only if it is top-balanced and both its substructures are balanced.
+```scheme
+(define (balanced? structure)
+  (if (mobile? structure)
+      (and (top-balanced? structure)
            (balanced? (left-structure structure))
-           (balanced? (right-structure structure)))))
+           (balanced? (right-structure structure)))
+      #t))
 ```
 
 
@@ -109,10 +121,3 @@ In the code for the selectors `right-branch` and `branch-structure` we need to c
 (define (branch-structure branch)
   (cdr branch))
 ```
-In the code for `mobile?` we need to change `list?` to `pair?`.
-```scheme
-(define (mobile? structure)
-  (pair? structure))
-```
-(Technically, we could have implemented `mobile?` with `pair?` instead of `list?` to begin with.
-But this would explicitly use that `list` is implemented via `cons`, which we are trying to avoid.)
