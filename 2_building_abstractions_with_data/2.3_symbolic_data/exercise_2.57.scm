@@ -1,56 +1,41 @@
-(define (=number? exp num)
-  (and (number? exp) (= exp num)))
-
-(define (variable? x) (symbol? x))
-(define (same-variable? v1 v2)
-  (and (variable? v1) (variable? v2) (eq? v1 v2)))
-
-(define (deriv exp var)
-  (cond ((number? exp) 0)
-        ((variable? exp)
-         (if (same-variable? exp var) 1 0))
-        ((sum? exp)
-         (make-sum (deriv (addend exp) var)
-                   (deriv (augend exp) var)))
-        ((product? exp)
-         (make-sum
-          (make-product (multiplier exp)
-                        (deriv (multiplicand exp) var))
-          (make-product (deriv (multiplier exp) var)
-                        (multiplicand exp))))
-        (else
-          (error "unknown expression type: DERIV" exp))))
+(load "../../sicplib.scm")
 
 
 
 ;;; General purpose functions.
 
-(define (operation? op exp)
-  (and (pair? exp) (eq? (car exp) op)))
+(define (operation? symbolic-op expr)
+  (and (pair? expr) (eq? (car expr) symbolic-op)))
+
+(define (terms expr)
+  (cdr expr))
 
 (define (combine symbolic-op number-op x y)
   (cond ((and (number? x) (number? y)) (number-op x y))
         ((and (operation? symbolic-op x)
               (operation? symbolic-op y))
-         (cons symbolic-op (append (cdr x) (cdr y))))
+         (cons symbolic-op (append (terms x) (terms y))))
         ((operation? symbolic-op x)
-         (cons symbolic-op (append (cdr x) (list y)))) ; allow for noncomm.
+         (cons symbolic-op (append (terms x) (list y))))
         ((operation? symbolic-op y)
-         (cons symbolic-op (cons x (cdr y))))
+         (cons symbolic-op (cons x (terms y))))
         (else (list symbolic-op x y))))
+
+(define (get-first combination)
+  (cadr combination))
 
 (define (singleton? x)
   (and (pair? x) (null? (cdr x))))
 
-(define (format-operation op items)
-  (cond ((singleton? items) (car items))
-        (else (cons op items))))
+(define (format-operation symbolic-op terms)
+  (if (singleton? terms)
+      (car terms)
+      (cons symbolic-op terms)))
 
-(define (get-first items)
-  (cadr items))
+(define (get-rest combination)
+  (format-operation (car combination) (cddr combination)))
 
-(define (get-rest items)
-  (format-operation (car items) (cddr items)))
+
 
 ;;; Sums
 
@@ -59,14 +44,16 @@
         ((=number? y 0) x)
         (else (combine '+ + x y))))
 
-(define (sum? exp)
-  (operation? '+ exp))
+(define (sum? expr)
+  (operation? '+ expr))
 
 (define (addend sum)
   (get-first sum))
 
 (define (augend sum)
   (get-rest sum))
+
+
 
 ;;; Products
 

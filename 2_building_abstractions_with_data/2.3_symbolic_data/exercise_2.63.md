@@ -26,7 +26,7 @@
 > 2. Do the two procedures have the same order of growth in the number of steps required to convert a balanced tree with $n$ elements to a list?
 >    If not, which one grows more slowly?
 
-
+---
 
 ### 1.
 
@@ -58,18 +58,22 @@ $$
   = C_1 \frac{n}{2} + 2 T (n / 2) + C_0
   = 2 T(n / 2) + \frac{C_1}{2} n + C_0 \,.
 $$
-The term $\frac{C_1}{2} n + C_0$ is linear in $n$, whence it follows that $T$ is in $Θ(n \log(n))$.[^1]
+The term $\frac{C_1}{2} n + C_0$ is linear in $n$, whence it follows that $T(n)$ is in $Θ(n \log(n))$.[^1]
 
-[^1]: Compare this to the situation for divide-and-conquer sorting algorithms, where we have $T(n) = 2 T(n / 2) + \text{linear time for merging the two lists}$, and get a run time of $Θ(n \log(n))$.
+[^1]: Compare this to the situation for divide-and-conquer sorting algorithms, where we have $T(n) = 2 T(n / 2) + \text{linear time for merging the two lists}$, and get a running time of $Θ(n \log(n))$.
 
-#### The second procedure:
+#### The second procedure
 
-The following operations are responsible for the run time of evaluating `(tree->list-2 t)`:
-the check `null?`, the procedure `cons`, and the three procedures `entry` (which is equivalent to `car`), `left-branch` (which is equivalent to `cadr`) and `right-branch` (which is equivalent to `caddr`).
+The following operations are responsible for the running time of evaluating `(tree->list-2 t)`:
+
+- the check `null?`,
+- the procedure `cons`, and
+- the three procedures `entry` (which is equivalent to `car`), `left-branch` (which is equivalent to `cadr`) and `right-branch` (which is equivalent to `caddr`).
+
 Each of these operations takes a constant amount of time, and each operation is called once for every entry in `t`.
-This already gives $Θ(n)$.
+This already gives $Θ(n)$ many steps.
 
 We also call `null?` twice for every leaf of `t`.
-But there cannot be more than $n$ leaves, so these are at most $2n$ further calls to `null?`.
+But there cannot be more than $n$ leaves, so these are no more than $2n$ further calls to `null?`.
 
-We thus get a total run time of $Θ(n)$.
+We thus get a total running time of $Θ(n)$.

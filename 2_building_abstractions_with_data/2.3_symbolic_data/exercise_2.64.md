@@ -34,9 +34,9 @@
 >
 > 2. What is the order of growth in the number of steps required by `list->tree` to convert a list of $n$ elements?
 
+---
 
-
-### 1.
+### a.
 
 The procedure `partial-tree` takes two inputs:
 a list of elements, called `elts`, and a non-negative integer $n$, which ought to be smaller or equal to the length of `elts`.
@@ -145,10 +145,10 @@ But _if_ the input list is sorted and contains no duplicate items, then the resu
 
 
 
-### 2.
+### b.
 
 We can already see that the number of steps to evaluate `(partial-tree elts k)` does only depend on $k$, and not on the list `elts` (but $k$ must be between zero and the length of `elts`).
-We denote the number of steps by $T(k)$.
+We denote this number of steps by $T(k)$.
 
 We need the following steps to evaluate `(partial-tree elts k)`:
 
@@ -161,14 +161,14 @@ But in general, we also need the following steps:
 2. Compute `(quotient (- k 1) 2)`:
    two steps.
 
-3. Evaluate `(patrial-tree elts k1)` for $k_1 ≔ ⌊ k/2 ⌋$:
+3. Evaluate `(patrial-tree elts k1)` for $k_1 ≔ ⌊ (k - 1)/2 ⌋$:
    $T(k_1)$ steps.
 
 4. The value of `(patrial-tree elts k1)` is a pair.
    Strip this pair apart with `car` and `cdr`:
    two steps.
 
-5. Compute $k_2 ≔ (k - (k_1 + 1))$ from $k_1$:
+5. Compute $k_2 ≔ k - (k_1 + 1)$:
    two steps.
 
 Note that $k_2 = k_1$ if $k$ is odd, and $k_2 = k_1 + 1$ otherwise.
@@ -188,7 +188,6 @@ Note that $k_2 = k_1$ if $k$ is odd, and $k_2 = k_1 + 1$ otherwise.
 10. A final call to `cons`:
     one step.
 
-We get overall that $T(k) = T(k_1) + T(k_2) + C$ for a constant $C$ which doesn’t depend on $k$, and where $k_1 = ⌊ k/2 ⌋$ and $k_2 = (k - (k_1 + 1))$, i.e., $k_1 + k_2 = k - 1$.
-(The value of $C$ should be $14$.)
+We get overall that $T(k) = T(k_1) + T(k_2) + C$ for a constant $C$ which doesn’t depend on $k$, and where $k_1 = ⌊ (k - 1)/2 ⌋$ and $k_2 = k - (k_1 + 1)$, i.e., $k_1 + k_2 = k - 1$.
 
-It follows that the procedure `list->tree` is in $Θ(n)$ where $n$ is the length of its input.
+It follows that the procedure `list->tree` has growth type $Θ(n)$ where $n$ is the length of its input.

@@ -3,24 +3,30 @@
 > The following eight-symbol alphabet with associated relative frequencies was designed to efficiently encode the lyrics of 1950s rock songs.
 > (Note that the “symbols” of an “alphabet” need not be individual letters.)
 >
-> | Word | Freq.  |   | Word | Freq. |   | Word | Freq. |   | Word | Freq. |
-> | :--- | ----:  | - | :--- | ----: | - | :--- | ----: | - | :--- | ----: |
-> | A    |     2  |   | GET  |     2 |   | NA   |    16 |   | YIP  |     9 |
-> | BOOM |     1  |   | JOB  |     2 |   | SHA  |     3 |   | WAH  |     1 |
+> | Word | Freq. |
+> | :--- | ----: |
+> | A    |     2 |
+> | BOOM |     1 |
+> | GET  |     2 |
+> | JOB  |     2 |
+> | NA   |    16 |
+> | SHA  |     3 |
+> | YIP  |     9 |
+> | WAH  |     1 |
 >
 > Use `generate-huffman-tree` (Exercise 2.69) to generate a corresponding Huffman tree, and use `encode` (Exercise 2.68) to encode the following message:
 >
-> > Get a job  
-> > Sha na na na na na na na na  
-> > Get a job  
-> > Sha na na na na na na na na  
-> > Wah yip yip yip yip yip yip yip yip yip  
-> > Sha boom  
+> > Get a job
+> > Sha na na na na na na na na
+> > Get a job
+> > Sha na na na na na na na na
+> > Wah yip yip yip yip yip yip yip yip yip
+> > Sha boom
 >
 > How many bits are required for the encoding?
 > What is the smallest number of bits that would be needed to encode this song if we used a fixed-length code for the eight-symbol alphabet?
 
-
+---
 
 we use the following code:
 ```scheme
@@ -82,14 +88,14 @@ The Huffman tree and the weight distribution looks as follows:
         *   * na      *   * yip                 9 *   * 16    7 *   * 9
        / \           / \                         / \           / \
       *   *         *   *                     4 *   * 5     3 *   * 4
-     / \   lb.   sha   / \                     / \               / \
-  a *   *             *   *                 2 *   * 2         2 *   * 2
+     / \  line-  sha   / \                     / \               / \
+  a *   *  break       *   *                 2 *   * 2         2 *   * 2
        / \         job     get                   / \
       *   *                                   1 *   * 1
    wah    boom
 ```
 The encoded message is 129 bits long.
 
-To encode a text with $n$ different symbols with a fixed-length code we need to use $⌈ \log_2 n ⌉$ many binary digits for each symbol.
-It our case, this would mean 4 digits per word.
-We have a total of 71 symbols, so we wound need 284 bits.
+To encode a text with $n$ different symbols with a fixed-length binary code, we need to use $⌈ \log_2 n ⌉$ many bits for each symbol.
+In our case, this would mean 4 bits per symbol.
+We have a total of 71 symbols, so we would need 284 bits.

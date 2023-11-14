@@ -14,9 +14,9 @@
 > ```
 > Use the `decode` procedure to decode the message, and give the result.
 
+---
 
-
-The result of `(decode sample-message sample-tree)` is `(a d a b b c a)` with mit-scheme (which casts all symbol names to lowercase), and `(A D A B B C A)` with DrRacket.
+The result of `(decode sample-message sample-tree)` is `(a d a b b c a)` with mit-scheme (which casts all symbol names to lowercase), and `(A D A B B C A)` with DrRacket (in SICP mode).
 The message is therefore ADABBCA.
 
 We can also check this result by hand:
@@ -78,4 +78,3 @@ The given message `0110010101110` is decoded as follows:
      add A to the result and return to the root
       (A (B (D C)))                               result: ADABBCA
 ```
-

@@ -7,7 +7,7 @@
 > How does the efficiency of each compare with the corresponding procedure for the non-duplicate representation?
 > Are there applications for which you would use this representation in preference to the non-duplicate one?
 
-
+---
 
 We can implement these functions with the following procedures:
 ```scheme
@@ -28,14 +28,13 @@ We can implement these functions with the following procedures:
 
 The implementation for `element-of-set? x set` didn’t change.
 But the procedure will now take longer, since we might need to compare the element `x` with the same value multiple times.
-We cannot estimate the run time of `elements-of-set?` in terms of the number of elements of the represented set anymore, since there is no limit to the number of duplicate entries.
+We cannot express the running time of `elements-of-set?` in terms of the number of elements of the represented set anymore, since there is no limit to the number of duplicate entries.
 
-The implementation of `adjoin-set` is now $Θ(1)$ instead of the previous $Θ(n)$.
+The implementation of `adjoin-set` is now $Θ(1)$ instead of the previous $O(n)$.
 
 The implementation for `intersection-set` didn’t change, but it will become slower because `element-of-set?` became slower.
-As before, we cannot estimate the run time anymore.
+As before, we cannot estimate the running time anymore, as it depends on the degree of duplication.
 
-The procedure `union-set` will now be faster for smaller lists, but will become slower for many repeated elements.
-As before, we cannot estimate the run time anymore.
+The procedure `union-set` will now be faster, and now takes $Θ(n)$.
 
-This representation for sets may be useful in situations where we have far more insertions or unions than lookups or intersections, or when we have only a relatively low chance for duplicate entries.
+This new representation for sets may be useful in situations in which we have far more insertions or unions than lookups or intersections, or in which we have only a relatively low chance for duplicate entries.

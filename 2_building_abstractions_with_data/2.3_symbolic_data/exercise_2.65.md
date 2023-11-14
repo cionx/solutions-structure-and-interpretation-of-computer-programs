@@ -8,32 +8,35 @@ We can use Exercise 2.63 to change the representation of sets from binary searc
 
 We start with the operations for the representation as ordered lists:
 ```scheme
-(define (element-of-oset? x set)
-  (cond ((null? set) false)
-        ((equal? x (car set)) true)
-        (else (element-of-oset? x (cdr set)))))
-
 (define (intersection-oset set1 set2)
-  (cond ((or (null? set1) (null? set2)) '())
-        ((element-of-oset? (car set1) set2)
-         (cons (car set1)
-               (intersection-oset (cdr set1) set2)))
-        (else (intersection-oset (cdr set1) set2))))
+  (if (or (null? set1) (null? set2))
+      '()
+      (let ((x1 (car set1))
+            (x2 (car set2))
+            (rest1 (cdr set1))
+            (rest2 (cdr set2)))
+        (cond ((= x1 x2)
+               (cons x1 (intersection-oset rest1 rest2)))
+              ((< x1 x2)
+               (intersection-oset rest1 set2))
+              ((> x1 x2)
+               (intersection-oset set1 rest2))))))
 
 (define (union-oset set1 set2)
   (cond ((null? set1) set2)
         ((null? set2) set1)
-        (else (let ((x1 (car set1))
-                    (x2 (car set2)))
-                (cond ((< x1 x2)
-                       (cons x1 (union-oset (cdr set1)
-                                            set2)))
-                      ((= x1 x2)
-                       (cons x1 (union-oset (cdr set1)
-                                            (cdr set2))))
-                      (else
-                       (cons x2 (union-oset set1
-                                            (cdr set2)))))))))
+        (else
+         (let ((x1 (car set1))
+               (x2 (car set2))
+               (rest1 (cdr set1))
+               (rest2 (cdr set2)))
+           (cond ((= x1 x2)
+                  (cons x1 (union-oset rest1 rest2)))
+                 ((< x1 x2)
+                  (cons x1 (union-oset rest1 set2)))
+                 ((> x1 x2)
+                  (cons x2 (union-oset set1 rest2))))))))
+
 ```
 We then need to be able to translate between binary trees and ordered lists:
 ```scheme
@@ -44,8 +47,8 @@ We then need to be able to translate between binary trees and ordered lists:
         (copy-to-list (left-branch tree)
                       (cons (entry tree)
                             (copy-to-list
-                              (right-branch tree)
-                              result-list)))))
+                             (right-branch tree)
+                             result-list)))))
   (copy-to-list tree '()))
 
 (define (oset->tree elements)
@@ -73,6 +76,7 @@ We then need to be able to translate between binary trees and ordered lists:
                                  right-tree)
                       remaining-elts))))))))
 ```
+
 We use an auxiliary procedure that allow us to translate procedures for ordered lists (in two arguments) to procedures for binary trees (again in two arguments):
 ```scheme
 (define (translate f)

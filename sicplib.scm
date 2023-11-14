@@ -91,7 +91,7 @@
 
 (define dx 0.00001)
 
-(define (derivative g) ; renamed to avoid later collision
+(define (derivative g) ; renamed to avoid collision with deriv in 2.3.2
   (lambda (x) (/ (- (g (+ x dx)) (g x)) dx)))
 
 (define (newton-transform g)
@@ -174,38 +174,33 @@
 
 
 
+;;; 2.3.2 Example: Symbolic Differentiation
 
+(define (operator expr) (car expr))
+(define (operands expr) (cdr expr))
 
-
-;;; Section 2.3; Data-directed Programming and Additivity
-
-;;; Section 2.3, derivatives
-
-(define (operator exp) (car exp))
-(define (operands exp) (cdr exp))
-
-(define (deriv exp var)
-  (cond ((number? exp) 0)
-        ((variable? exp)
-         (if (same-variable? exp var) 1 0))
-        ((sum? exp)
-         (make-sum (deriv (addend exp) var)
-                   (deriv (augend exp) var)))
-        ((product? exp)
+(define (deriv expr var)
+  (cond ((number? expr) 0)
+        ((variable? expr)
+         (if (same-variable? expr var) 1 0))
+        ((sum? expr)
+         (make-sum (deriv (addend expr) var)
+                   (deriv (augend expr) var)))
+        ((product? expr)
          (make-sum
-          (make-product (multiplier exp)
-                        (deriv (multiplicand exp) var))
-          (make-product (deriv (multiplier exp) var)
-                        (multiplicand exp))))
+          (make-product (multiplier expr)
+                        (deriv (multiplicand expr) var))
+          (make-product (deriv (multiplier expr) var)
+                        (multiplicand expr))))
         (else
-          (error "unknown expression type: DERIV" exp))))
+          (error "unknown expression type -- DERIV" expr))))
 
 (define (variable? x) (symbol? x))
 (define (same-variable? v1 v2)
   (and (variable? v1) (variable? v2) (eq? v1 v2)))
 
-(define (=number? exp num)
-  (and (number? exp) (= exp num)))
+(define (=number? expr num)
+  (and (number? expr) (= expr num)))
 
 (define (make-sum a1 a2)
   (cond ((=number? a1 0) a2)
@@ -226,11 +221,16 @@
 (define (multiplier p) (cadr p))
 (define (multiplicand p) (caddr p))
 
-;; Section 2.3, sets
+
+
+;; 2.3.3 Sets; Sets as unordered lists
+;; These procedures will be overwritten in a moment, and cannot be used via
+;; loading of sicplib. We include these procedures only for completeness.
 
 (define (element-of-set? x set)
-  (cond ((null? set) false)
-        ((equal? x (car set)) true)
+  (display "test")
+  (cond ((null? set) #f)
+        ((equal? x (car set)) #t)
         (else (element-of-set? x (cdr set)))))
 
 (define (adjoin-set x set)
@@ -245,7 +245,11 @@
                (intersection-set (cdr set1) set2)))
         (else (intersection-set (cdr set1) set2))))
 
-;; Section 2.3, trees
+
+
+;; 2.3.3 Sets; Sets as binary trees
+;; Some of these procedures will be overwritten in a moment, and cannot be used
+;; via loading of sicplib. We include these procedures only for completeness.
 
 (define (entry tree) (car tree))
 
@@ -311,7 +315,8 @@
                                  right-tree)
                       remaining-elts))))))))
 
-;; Intersection in terms of basic operations.
+;; Intersection and union in terms of basic operations.
+
 (define (intersection-set set1 set2)
   (cond ((or (null? set1) (null? set2)) '())
         ((element-of-set? (car set1) set2)
@@ -328,7 +333,9 @@
             smaller-union
             (cons element smaller-union)))))
 
-;;; Section 2.3; Huffman Encoding Trees
+
+
+;;; Section 2.3.4; Huffman Encoding Trees
 
 (define (make-leaf symbol weight)
   (list 'leaf symbol weight))
@@ -345,7 +352,7 @@
         (append (symbols left) (symbols right))
         (+ (weight left) (weight right))))
 
-(define (left-branch  tree) (car  tree))
+(define (left-branch tree) (car tree))
 
 (define (right-branch tree) (cadr tree))
 
@@ -374,7 +381,7 @@
 (define (choose-branch bit branch)
   (cond ((= bit 0) (left-branch branch))
         ((= bit 1) (right-branch branch))
-        (else (error "bad bit: CHOOSE-BRANCH" bit))))
+        (else (error "bad bit -- CHOOSE-BRANCH" bit))))
 
 (define (adjoin-set x set)
   (cond ((null? set) (list x))
@@ -389,6 +396,8 @@
         (adjoin-set (make-leaf (car pair)    ; symbol
                                (cadr pair))  ; frequency
                     (make-leaf-set (cdr pairs))))))
+
+
 
 ;;; Section 2.4; Tagged Data
 

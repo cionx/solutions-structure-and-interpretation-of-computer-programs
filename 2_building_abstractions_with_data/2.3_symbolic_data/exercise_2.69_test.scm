@@ -1,6 +1,8 @@
-(load "../../sicplib.scm")
+(load "exercise_2.69.scm")
 
 
+
+(define pairs '((A 4) (B 2) (C 1) (D 1)))
 
 (define sample-tree
   (make-code-tree (make-leaf 'A 4)
@@ -10,8 +12,12 @@
                     (make-leaf 'D 1)
                     (make-leaf 'C 1)))))
 
-(define sample-message '(0 1 1 0 0 1 0 1 0 1 1 1 0))
+(newline)
+(display "Sample tree")
+(newline)
+(display sample-tree)
 
-
-
-(decode sample-message sample-tree)
+(newline)
+(display "Computed tree")
+(newline)
+(display (generate-huffman-tree pairs))

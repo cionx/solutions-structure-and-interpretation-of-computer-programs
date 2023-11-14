@@ -11,33 +11,33 @@
 > If you find yourself designing a complex procedure, then you are almost certainly doing something wrong.
 > You can take significant advantage of the fact that we are using an ordered set representation.)
 
+---
 
-
-The leafs in the list `(make-leaf-set pairs)` are ordered in increasing weight.
+The items in the list `(make-leaf-set pairs)` are ordered in increasing order by weight.
 We merge the first two entries of this list with `make-code-tree`, and then insert the resulting tree back into the remaining list with `adjoin-set`;
 the resulting list of trees will again be ordered in increasing weight.
-We repeat this process until only one tree is left in the list;
-this is then the computed Huffman tree.
+We repeat this process until only one tree is left in the list.
+This tree is then the computed Huffman tree.
 ```scheme
 (define (generate-huffman-tree pairs)
   (successive-merge (make-leaf-set pairs)))
 
 (define (successive-merge ordered-tree-list)
-  (define (merge otl)
-    (let ((t1 (car otl))
-          (all-but-1 (cdr otl)))
+  (define (merge ordered-tree-list)
+    (let ((t1 (car ordered-tree-list))
+          (all-but-1 (cdr ordered-tree-list)))
       (if (null? all-but-1)
           t1
           (let ((t2 (car all-but-1))
                 (all-but-2 (cdr all-but-1)))
-            (merge
-             (adjoin-set (make-code-tree t1 t2)
-                         all-but-2))))))
+            (merge (adjoin-set (make-code-tree t1 t2)
+                               all-but-2))))))
   (if (null? ordered-tree-list)
       '()
       (merge ordered-tree-list)))
 ```
-We can test our code with the tree from Exercise 2.67:
+
+We can test our code by reproducing the tree from Exercise 2.67:
 ```scheme
 (define pairs '((A 4) (B 2) (C 1) (D 1)))
 
@@ -59,6 +59,7 @@ We can test our code with the tree from Exercise 2.67:
 (newline)
 (display (generate-huffman-tree pairs))
 ```
+
 ```text
 Sample tree
 ((leaf a 4) ((leaf b 2) ((leaf d 1) (leaf c 1) (d c) 2) (b d c) 4) (a b d c) 8)

@@ -1,100 +1,75 @@
-(define (=number? exp num)
-  (and (number? exp) (= exp num)))
-
-(define (variable? x) (symbol? x))
-
-(define (same-variable? v1 v2)
-  (and (variable? v1) (variable? v2) (eq? v1 v2)))
-
-(define (deriv exp var)
-  (cond ((number? exp) 0)
-        ((variable? exp)
-         (if (same-variable? exp var) 1 0))
-        ((sum? exp)
-         (make-sum (deriv (addend exp) var)
-                   (deriv (augend exp) var)))
-        ((product? exp)
-         (make-sum
-          (make-product (multiplier exp)
-                        (deriv (multiplicand exp) var))
-          (make-product (deriv (multiplier exp) var)
-                        (multiplicand exp))))
-        (else
-          (error "unknown expression type: DERIV" exp))))
-
-
+(load "../../sicplib.scm")
 
 (define (atom? expr)
-  (or (number? expr)
-      (variable? expr)))
+  (or (number? expr) (variable? expr)))
 
-(define (operation? op exp)
-  (eq? op (find-lowest exp)))
-
-(define (precedence atom)
-  (cond ((eq? atom '+) 1)
-        ((eq? atom '*) 2)
+(define (precedence expr)
+  (cond ((and (atom? expr) (eq? expr '+)) 1)
+        ((and (atom? expr) (eq? expr '*)) 2)
         (else 3)))
 
 ;; Finds the item with the lowest precende;
 ;; if multiple items have lowest precedence,
 ;; then the first find is returned.
-(define (find-lowest exp)
-  (define (iter lowest-so-far rest-exp)
-    (if (null? rest-exp)
+(define (find-lowest expr)
+  (define (iter lowest-so-far rest-combination)
+    (if (null? rest-combination)
         lowest-so-far
-        (let ((head (car rest-exp))
-              (tail (cdr rest-exp)))
-          (iter (if (< (precedence head)
-                       (precedence lowest-so-far))
-                    head
-                    lowest-so-far)
-                tail))))
-  (cond ((null? exp)
+        (let ((head (car rest-combination))
+              (tail (cdr rest-combination)))
+          (let ((new-lowest (if (< (precedence head)
+                                   (precedence lowest-so-far))
+                                head
+                                lowest-so-far)))
+            (iter new-lowest tail)))))
+  (cond ((null? expr)
          (error "Error: cannot find a lowest-precedence atom in an empty expression"))
-        ((atom? exp) exp)
-        (else (iter (car exp) (cdr exp)))))
+        ((atom? expr) expr)
+        (else (iter (car expr) (cdr expr)))))
 
-(define (total-precedence exp)
-  (precedence (find-lowest exp)))
+(define (total-precedence expr)
+  (precedence (find-lowest expr)))
 
-(define (parentisize exp)
-  (if (pair? exp) exp (list exp)))
+(define (operation? op expr)
+  (eq? op (find-lowest expr)))
+
+(define (parentisize expr)
+  (if (pair? expr) expr (list expr)))
 
 (define (combine symbolic-op number-op x y)
+  (define (make-items-list z)
+    (cond ((< (total-precedence z)
+              (precedence symbolic-op))
+           (list (parentisize z)))
+          ((atom? z) (list z))
+          (else z)))
   (if (and (number? x) (number? y))
       (number-op x y)
-      (let ((p (precedence symbolic-op)))
-        (define (make-items-list z)
-          (cond ((< (total-precedence z) p)
-                 (list (parentisize z)))
-                ((atom? z) (list z))
-                (else z)))
-        (append (make-items-list x)
-                (cons symbolic-op
-                      (make-items-list y))))))
+      (append (make-items-list x)
+              (cons symbolic-op
+                    (make-items-list y)))))
 
 (define (singleton? x)
   (and (pair? x) (null? (cdr x))))
 
-(define (unpack-singleton input)
-  (if (singleton? input) (car input) input))
+(define (unpack-singleton item)
+  (if (singleton? item) (car item) item))
 
-(define (get-first op exp)
-  (define (get-first-list expression)
+(define (get-first op expr)
+  (define (get-first-as-list expression)
     (if (or (null? expression)
             (eq? op (car expression)))
         '()
         (cons (car expression)
-              (get-first-list (cdr expression)))))
- (unpack-singleton (get-first-list exp)))
+              (get-first-as-list (cdr expression)))))
+  (unpack-singleton (get-first-as-list expr)))
 
-(define (get-rest op exp)
-  (define (get-rest-list expression)
+(define (get-rest op expr)
+  (define (get-rest-as-list expression)
     (cond ((null? expression) '())
           ((eq? (car expression) op) (cdr expression))
-          (else (get-rest-list (cdr expression)))))
-  (unpack-singleton (get-rest-list exp)))
+          (else (get-rest-as-list (cdr expression)))))
+  (unpack-singleton (get-rest-as-list expr)))
 
 ;;; Sums
 
@@ -103,8 +78,8 @@
         ((=number? y 0) x)
         (else (combine '+ + x y))))
 
-(define (sum? exp)
-  (operation? '+ exp))
+(define (sum? expr)
+  (operation? '+ expr))
 
 (define (addend sum)
   (get-first '+ sum))
@@ -120,8 +95,8 @@
         ((=number? y 1) x)
         (else (combine '* * x y))))
 
-(define (product? exp)
-  (operation? '* exp))
+(define (product? expr)
+  (operation? '* expr))
 
 (define (multiplier product)
   (get-first '* product))

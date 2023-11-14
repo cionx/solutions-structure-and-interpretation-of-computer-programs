@@ -12,27 +12,34 @@
 > You should design `encode-symbol` so that it signals an error if the symbol is not in the tree at all.
 > Test your procedure by encoding the result you obtained in Exercise~2.67 with the sample tree and seeing whether it is the same as the original sample message.
 
+---
 
-
-We write `encode-symbol` as follows:
+We use the following procedure:
 ```scheme
 (define (encode-symbol sym tree)
-  (define (encode-symbol-1 t)
-    (cond ((null? t) (error "Cannot find symbol in an empty tree"))
-          ((leaf? t)
-           (if (eq? sym (symbol-leaf t)) '() false))
-          (else (let ((left-result (encode-symbol-1 (left-branch t))))
-                  (if (eq? left-result false)
-                      (let ((right-result (encode-symbol-1 (right-branch t))))
-                        (if (eq? right-result false)
-                            false
-                            (cons 1 right-result)))
-                      (cons 0 left-result))))))
+  (define (encode-symbol-1 current-branch)
+    (cond ((null? current-branch)
+           (error "Cannot find symbol in an empty tree"))
+          ((leaf? current-branch)
+           (if (eq? sym (symbol-leaf current-branch))
+               '()
+               #f))
+          (else
+           (let ((left-result
+                  (encode-symbol-1 (left-branch current-branch))))
+            (if (not left-result)
+                (let ((right-result
+                       (encode-symbol-1 (right-branch current-branch))))
+                  (if (not right-result)
+                      #f
+                      (cons 1 right-result)))
+                (cons 0 left-result))))))
   (let ((result (encode-symbol-1 tree)))
-    (if (eq? result false)
-        (error "Cannot find symbol " sym)
+    (if (eq? result #f)
+        (error "Cannot find symbol in tree" sym)
         result)))
 ```
+
 In the previous exercise we decoded `0110010101110` to `ADABBCA`.
 The procedure `encode` agrees with this result:
 ```text

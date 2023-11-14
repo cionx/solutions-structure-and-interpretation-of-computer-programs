@@ -1,11 +1,4 @@
-(define (filter predicate sequence)
-  (cond ((null? sequence) '())
-        ((predicate (car sequence))
-         (cons (car sequence)
-               (filter predicate (cdr sequence))))
-        (else (filter predicate (cdr sequence)))))
-
-
+(load "../../sicplib.scm")
 
 (define (element-of-set? x set)
   (and (not (null? set))

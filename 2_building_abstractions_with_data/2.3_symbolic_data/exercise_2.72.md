@@ -6,14 +6,59 @@
 > To answer this question in general is difficult.
 > Consider the special case where the relative frequencies of the $n$ symbols are as described in Exercise 2.71, and give the order of growth (as a function of $n$) of the number of steps needed to encode the most frequent and least frequent symbols in the alphabet.
 
+---
 
+Our code from Exercise 2.68 is as follows:
+```scheme
+(define (encode message tree)
+  (if (null? message)
+      '()
+      (append (encode-symbol (car message) tree)
+              (encode (cdr message) tree))))
 
-The symbols in Exercise 2.68 are $s_0, s_1, …, s_n$, with $s_k$ of frequency $f_k = 2^k$.
+(define (encode-symbol sym tree)
+  (define (encode-symbol-1 current-branch)
+    (cond ((null? current-branch)
+           (error "Cannot find symbol in an empty tree"))
+          ((leaf? current-branch)
+           (if (eq? sym (symbol-leaf current-branch))
+               '()
+               #f))
+          (else
+           (let ((left-result
+                  (encode-symbol-1 (left-branch current-branch))))
+            (if (not left-result)
+                (let ((right-result
+                       (encode-symbol-1 (right-branch current-branch))))
+                  (if (not right-result)
+                      #f
+                      (cons 1 right-result)))
+                (cons 0 left-result))))))
+  (let ((result (encode-symbol-1 tree)))
+    (if (eq? result #f)
+        (error "Cannot find symbol in tree" sym)
+        result)))
+```
+The procedure `encode-symbol`, or more precisely `encode-symbol-1`, searches recursively for the given symbol.
+It visits each node in the tree exactly once, and performs a constant amount of work at each node.
+(Note that we do not go through the list of symbols at each node, which would make the amount of work non-constant, and which the exercise alludes to.)
+The worst-case performance is therefore $Θ(m)$, where $m$ is the number of nodes in the tree.
+This worst-case occurs if we search for the right-most symbol in the tree, or if we search for a symbol that is not in the tree at all.
+
+We observe that a Huffman tree for $n$ symbols contains $n - 1$ many non-leaf nodes.
+To see this, consider how the Huffman tree is computed from the original $n$ symbols via successive merging.
+Each merge combines two sets into one, and therefore reduces the total number of remaining sets by one.
+As we started with $n$ sets, we will have $n - 1$ many merges.
+But the non-leaf nodes in the resulting Huffman tree correspond one-to-one to these merges.
+Thus, there are $n - 1$ many non-leaf nodes.
+
+We hence find that $Θ(m) = Θ(n + (n - 1)) = Θ(2n - 1) = Θ(n)$.
+The worst-case running time for looking up a symbol in a Huffman tree on $n$ symbols (with our above procedure) is therefore $Θ(n)$.
+
+The symbols in Exercise 2.68 are $s_0, s_1, …, s_{n - 1}$, with $s_k$ of frequency $f_k = 2^k$.
 The resulting Huffman tree looks as follows:
 ```text
-     * {s₀, s₁, s₂, …, sₙ₋₁, sₙ}
-    / \
-sₙ *   * {s₀, s₁, s₂, …, sₙ₋₁}
+       * {s₀, s₁, s₂, …, sₙ₋₁}
       / \
 sₙ₋₁ *   .
           .
@@ -25,84 +70,10 @@ sₙ₋₁ *   .
               / \
           s₁ *   * s₀
 ```
-Our code from Exercise 2.68 is as follows:
-```scheme
-(define (encode message tree)
-  (if (null? message)
-      '()
-      (append (encode-symbol (car message) tree)
-              (encode (cdr message) tree))))
 
-(define (encode-symbol sym tree)
-  (define (encode-symbol-1 t)
-    (cond ((null? t) (error "Cannot find symbol in an empty tree"))
-          ((leaf? t)
-           (if (eq? sym (symbol-leaf t)) '() false))
-          (else (let ((left-result (encode-symbol-1 (left-branch t))))
-                  (if (eq? left-result false)
-                      (let ((right-result (encode-symbol-1 (right-branch t))))
-                        (if (eq? right-result false)
-                            false
-                            (cons 1 right-result)))
-                      (cons 0 left-result))))))
-  (let ((result (encode-symbol-1 tree)))
-    (if (eq? result false)
-        (error "Cannot find symbol " sym)
-        result)))
-```
+Looking up the most frequent symbol $s_{n - 1}$ takes $Θ(1)$ time (i.e., independent of $n$), and looking up the least frequent symbol $s_0$ takes $Θ(n)$ time.
+(The symbol $s_0$ is right-most in the Huffman tree, and thus represents one of the worst-case scenarios.)
 
-To encode the symbol $s_k$ with $k > 0$ we will start off as follows:
-
-1. Determine that `t` is neither empty nor a leaf.
-
-2. Determine the left branch `t'` of `t` and compute `(encode-symbol1 s₁ t')`.
-
-3. Check that the result is `false`.
-
-4. Compute the right branch `t''` of `t`.
-
-Let $C_1$ be the number of steps needed so far.
-
-The above steps are now repeated, but with `t''` instead of `t`.
-This will take again $C_1$ many steps, as we perform the same operations in tree segments of the same shape:
-```
-                                                                  eq? left-result
-null?    leaf?   left-branch                                          false        right-branch
-  ↓        ↓          ↓                             eq?                 ↓           ↓
-  *        *          *     null?  *    leaf?  *    symbols  *          *           *
- / \      / \        / \        ↓ / \       ↓ / \         ↓ / \        / \         / \
-*   ⋱    *   ⋱      *   ⋱        *   ⋱       *   ⋱         *   ⋱      *   ⋱       *   ⋱
-```
-
-In total, we need $n - k$ iterations to arrive at the subtree that has $s_k$ in its left branch.
-At this point, we still have to go through the first two lines.
-But this time, `(eq? sym (symbol-leaf t))` is `true`, and instead of `false` we get `'()`.
-Instead of descending further down in the tree, we now go back up and collect the digits `0`, `1`, `1`, …, `1` along the way.
-This ascend back to the root of `t` is again a multiple of $n - k$.
-
-Lastly, it is checked that the overall result is not `false`, which takes only a constant amount of time.
-
-We have overall taken
-$$
-  \begin{aligned}
-    {}&
-      \underbrace{C_1 (n - k)}_{\text{getting to the correct subtree}}
-    + \underbrace{\mathrm{constant}}_{\text{discovering that we found the leaf}}
-    + \underbrace{C_2 (n - k) + \mathrm{constant}}_{\text{ascending to the root}}
-    + \underbrace{\mathrm{constant}}_{\text{check of the end result}}
-    \\[2em]
-    ={}&
-    C (n - k) + c_1
-  \end{aligned}
-$$
-steps, for suitable constants $C$ and $c_2$.
-
-The situation for the symbol $s_0$ is similar, except that we need slightly less steps.
-We thus need $C n + c_2$ steps to encode $s_0$, where $c_2$ is a slighly smaller constant than $c_1$.
-
-We find overall that encoding $s_k$ takes $Θ(n - k + 1)$ steps;
-if $k = n$ (the most frequent symbol) then this is $Θ(1)$, and if $k = 0$ (the least frequency symbol) then this is $Θ(n)$;
-for $k > 0$, this is $Θ(n - k)$.
-
-To encode the entire message, we need $Θ( ∑_{k = 0}^n f_k (n - k + 1) )$ steps.
-We have already seen in our computations for the last exercise that this is $Θ(2^{n + 2} - n - 3)$, and thus $Θ(2^n)$.
+But it should be noted that our procedure is biased in favour of left branches:
+we first search for a symbol in the left branch, then in the right branch.
+If we searched right branches first, then both $s_0$ and $s_{n - 1}$ would take $Θ(n)$ time.
