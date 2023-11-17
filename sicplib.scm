@@ -5,10 +5,14 @@
 
 
 
+
+
 ;;; 1.1.7 Example: Square Roots by Newton’s Method
 
 (define (average x y)
   (/ (+ x y) 2))
+
+
 
 
 
@@ -19,10 +23,12 @@
 
 
 
+
 ;;; 1.2.4 Exponentiation
 
 (define (even? n)
   (= (remainder n 2) 0))
+
 
 
 
@@ -66,11 +72,13 @@
 
 
 
+
 ;;; 1.3.1 Procedures as Arguments
 
 (define (identity x) x)
 
 (define (inc x) (+ x 1))
+
 
 
 
@@ -104,6 +112,7 @@
 
 
 
+
 ;;; 2.1.4 Extended Exercise: Interval Arithmetic
 
 (define (make-interval a b) (cons a b))
@@ -132,6 +141,7 @@
 
 (define (width i)
   (/ (- (upper-bound i) (lower-bound i)) 2))
+
 
 
 
@@ -171,6 +181,7 @@
   (list (car pair)
         (cadr pair)
         (+ (car pair) (cadr pair))))
+
 
 
 
@@ -223,6 +234,7 @@
 
 
 
+
 ;; 2.3.3 Sets; Sets as unordered lists
 ;; These procedures will be overwritten in a moment, and cannot be used via
 ;; loading of sicplib. We include these procedures only for completeness.
@@ -244,6 +256,7 @@
          (cons (car set1)
                (intersection-set (cdr set1) set2)))
         (else (intersection-set (cdr set1) set2))))
+
 
 
 
@@ -335,6 +348,7 @@
 
 
 
+
 ;;; Section 2.3.4; Huffman Encoding Trees
 
 (define (make-leaf symbol weight)
@@ -399,7 +413,8 @@
 
 
 
-;;; Section 2.4; Tagged Data
+
+;;; 2.4.2 Tagged Data
 
 (define (attach-tag type-tag contents)
   (cons type-tag contents))
@@ -420,6 +435,13 @@
 (define (polar? z)
   (eq? (type-tag z) 'polar))
 
+
+
+
+;;; 2.4.3 Data-Directed Programming and Additivity
+
+;; The following part as imported from Chapter 3, as it is needed here
+;; START IMPORT
 (define (assoc key records)
   (cond ((null? records) false)
         ((equal? key (caar records)) (car records))
@@ -459,17 +481,7 @@
 (define operation-table (make-table))
 (define get (operation-table 'lookup-proc))
 (define put (operation-table 'insert-proc!))
-
-;;; Now the actual code of the chapter.
-
-(define (apply-generic op . args)
-  (let ((type-tags (map type-tag args)))
-    (let ((proc (get op type-tags)))
-      (if proc
-          (apply proc (map contents args))
-          (error
-            "No method for these types: APPLY-GENERIC"
-            (list op type-tags))))))
+;; END IMPORT
 
 (define (install-rectangular-package)
   ;; internal procedures
@@ -517,10 +529,22 @@
        (lambda (r a) (tag (make-from-mag-ang r a))))
   'done)
 
+(define (apply-generic op . args)
+  (let ((type-tags (map type-tag args)))
+    (let ((proc (get op type-tags)))
+      (if proc
+          (apply proc (map contents args))
+          (error
+            "No method for these types: APPLY-GENERIC"
+            (list op type-tags))))))
+
 (define (real-part z) (apply-generic 'real-part z))
 (define (imag-part z) (apply-generic 'imag-part z))
 (define (magnitude z) (apply-generic 'magnitude z))
 (define (angle z) (apply-generic 'angle z))
+
+
+
 
 ;;; Section 2.5: Systems with generic operations
 

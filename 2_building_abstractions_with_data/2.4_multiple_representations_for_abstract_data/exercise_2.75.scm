@@ -21,5 +21,5 @@
           ((eq? op 'imag-part) (* r (sin a)))
           ((eq? op 'magnitude) r)
           ((eq? op 'angle) a)
-          (else error "Unknown op: MAKE-FROM-MAG-ANG")))
+          (else error "Unknown op: MAKE-FROM-MAG-ANG" op)))
   dispatch)

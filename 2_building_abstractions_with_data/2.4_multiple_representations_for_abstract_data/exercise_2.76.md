@@ -5,7 +5,7 @@
 > Which organization would be most appropriate for a system in which new types must often be added?
 > Which would be most appropriate for a system in which new operations must often be added?
 
-
+---
 
 We assume that the given three strategies are as follows:
 
@@ -87,6 +87,7 @@ We assume that the given three strategies are as follows:
          (lambda (r a) (tag (make-from-mag-ang r a))))
     'done)
   ```
+
 - By “message-passing” we refer to the second of the two strategies presented in Subsection 2.4.3, in which an object is represented by its dispatches:
   ```scheme
   (define (make-from-real-imag x y)
@@ -103,19 +104,21 @@ We assume that the given three strategies are as follows:
 
 
 
-### Explicit dispatch & message-passing
+### Explicit dispatch
 
-For explicit dispatch we need to add a new procedure for each new operation, but do not need to modify the already existing procedures.
-But when we add a new type of input, then we need to modify all existing procedures.
-
-The message-passing style similarly requires us to write a new procedure for each new operation, while adding a new type requires us to modify all already existing procedures.
-
-For an organization that is often adding new operations but only rarely new types, both explicit dispatch and message-passing may be appropriate.
-For an organization that is rarely adding new operations but frequently new types, neither explicit dispatch nor message-passing seems to be a good choice.
+Explicit dispatch requires us to rewrite the existing procedures whenever we add a new type, whereas adding a new operation requires adding a new procedure.
+This approach is suitable if we often add new operations, but rarely new types.
 
 
 
-### Data-directed
+### Message passing
+
+Message passing requires us to rewrite the existing procedures whenever we add a new operation, whereas adding a new type requires adding a new procedure.
+This approach is suitable if we often add new types, but rarely new operations.
+
+
+
+### Data-directed with packages
 
 For the data-directed approach, we need to install new procedures in the table anytime we add new operations or new types.
 
@@ -140,6 +143,12 @@ For an organization that is often adding new types, but rarely new operations, t
 For an organization that is very rarely adding new types, but often new operations, the data-directed approach may also be suitable:
 in this case it may be feasible to simply add a new package for each new operation and keep the packages for the types mostly untouched.
 This should reduce the problem of possible conflicts.
-However, for such an organization it may be better to just use explicit dispatch or message-passing instead.
 
 If we don’t allow packages for operations, but only for types, then such an organization (that has rarely new types but often new operations) probably shouldn’t use the data-directed approach.
+
+
+
+### Data-directed without packages
+
+If we don’t organize the procedures in packages, but instead freely add entries to the operation-type table, then the above issues don’t occur.
+In this situation, a data-directed approach may be suitable for all the given situations.

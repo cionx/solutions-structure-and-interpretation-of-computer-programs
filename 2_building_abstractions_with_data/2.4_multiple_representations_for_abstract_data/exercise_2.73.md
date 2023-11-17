@@ -2,36 +2,36 @@
 
 > Section 2.3.2 described a program that performs symbolic differentiation:
 > ```scheme
-> (define (deriv exp var)
->   (cond ((number? exp) 0)
->         ((variable? exp)
->          (if (same-variable? exp var) 1 0))
->         ((sum? exp)
->          (make-sum (deriv (addend exp) var)
->                    (deriv (augend exp) var)))
->         ((product? exp)
+> (define (deriv expr var)
+>   (cond ((number? expr) 0)
+>         ((variable? expr)
+>          (if (same-variable? expr var) 1 0))
+>         ((sum? expr)
+>          (make-sum (deriv (addend expr) var)
+>                    (deriv (augend expr) var)))
+>         ((product? expr)
 >          (make-sum
->           (make-product (multiplier exp)
->                         (deriv (multiplicand exp) var))
->           (make-product (deriv (multiplier exp) var)
->                         (multiplicand exp))))
+>           (make-product (multiplier expr)
+>                         (deriv (multiplicand expr) var))
+>           (make-product (deriv (multiplier expr) var)
+>                         (multiplicand expr))))
 >         ⟨more rules can be added here⟩
->         (else (error "unknown expression type: DERIV" exp))))
+>         (else (error "unknown expression type: DERIV" expr))))
 > ```
 > We can regard this program as performing a dispatch on the type of the expression to be differentiated.
 > In this situation the “type tag” of the datum is the algebraic operator symbol (such as `+`) and the operation being performed is `deriv`.
 > We can transform this program into data-directed style by rewriting the basic derivative procedure as
 > ```scheme
-> (define (deriv exp var)
->   (cond ((number? exp) 0)
->         ((variable? exp)
->          (if (same-variable? exp var) 1 0))
+> (define (deriv expr var)
+>   (cond ((number? expr) 0)
+>         ((variable? expr)
+>          (if (same-variable? expr var) 1 0))
 >         (else
->          ((get 'deriv (operator exp)) (operands exp) var))))
+>          ((get 'deriv (operator expr)) (operands expr) var))))
 >
-> (define (operator exp) (car exp))
+> (define (operator expr) (car expr))
 >
-> (define (operands exp) (cdr exp))
+> (define (operands expr) (cdr expr))
 > ```
 >
 > 1.  Explain what was done above.
@@ -44,24 +44,29 @@
 > 4.  In this simple algebraic manipulator the type of an expression is the algebraic operator that binds it together.
 >     Suppose, however, we indexed the procedures in the opposite way, so that the dispatch line in `deriv` looked like
 >     ```scheme
->     ((get (operator exp) 'deriv) (operands exp) var)
+>     ((get (operator expr) 'deriv) (operands expr) var)
 >     ```
 >     What corresponding changes to the derivative system are required?
+
+---
 
 
 
 ### 1.
 
-The exercise already explained itself.
+A number is not a tagged datum
 
-The problem with `number?` and `variable?` is that numbers and variables cannot be regarded as tagged data, since a tagged datum is always a pair whose first entry is a symbol.
+A variable could _theoretically_ be interpreted as a tagged datum:
+the variable name is the tag, and the contents are empty.
+But this would mean that we need to register a procedure for every possible variable symbol, which isn’t feasible.
+
 We would need to represent numbers as `('number ⟨n⟩)` and variables as `('variable ⟨var⟩)` to incorporate the derivation rules for constants and variables into the general framework of tagged data.
 
 
 
 ### 2. and 3.
 
-We can rewrite the previous procedures in terms of tagged data as follows:
+We can rewrite the previous procedures for sums, products, and powers in terms of tagged data as follows:
 ```scheme
 (define (operator exp) (type-tag exp))
 (define (operands exp) (contents exp))
@@ -85,16 +90,17 @@ We can rewrite the previous procedures in terms of tagged data as follows:
 (define (multiplier p) (car (contents p)))
 (define (multiplicand p) (cadr (contents p)))
 
-(define (make-exponentiation b n)
+(define (make-power b n)
   (cond ((= n 0) 1)
         ((= n 1) b)
         ((number? b) (expt b n))
         (else (attach-tag '** (list b n)))))
-(define (exponentiation? x) (eq? (type-tag x) '**))
+(define (power? x) (eq? (type-tag x) '**))
 (define (base e) (car (contents e)))
 (define (exponent e) (cadr (contents e)))
 ```
-We can then use the following code:
+
+We can then use the following code to implemented derivatives of sums, products, and powers, and install these procedures.
 ```scheme
 (define (install-deriv-package)
   ;; internal procedures
@@ -110,9 +116,8 @@ We can then use the following code:
   (define (deriv-pow arguments var)
     (let ((base (car arguments))
           (n (cadr arguments)))
-      (make-product n (make-product
-                       (make-exponentiation base (- n 1))
-                       (deriv base var)))))
+      (make-product n (make-product (make-power base (- n 1))
+                                    (deriv base var)))))
   ;; interface to the rest of the system
   (put 'deriv '+ deriv-add)
   (put 'deriv '* deriv-mul)
@@ -120,6 +125,8 @@ We can then use the following code:
   'done)
 ```
 
+(We use `car` and `cadr` instead of `addend`, etc.
+This is because `expressions` already had its type-tag ripped of by `operands`, but `addend`, etc. also remove the label via `contents`.)
 
 
 ### 4.

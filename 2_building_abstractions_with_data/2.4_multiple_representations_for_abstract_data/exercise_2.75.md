@@ -3,9 +3,9 @@
 > Implement the constructor `make-from-mag-ang` in message-passing style.
 > This procedure should be analogous to the `make-from-real-imag` procedure given above.
 
+---
 
-
-We can write the constructor `make-from-mag-ang` as follows:
+We can implement the constructor `make-from-mag-ang` as follows:
 ```scheme
 (define (make-from-mag-ang r a)
   (define (dispatch op)
@@ -13,6 +13,6 @@ We can write the constructor `make-from-mag-ang` as follows:
           ((eq? op 'imag-part) (* r (sin a)))
           ((eq? op 'magnitude) r)
           ((eq? op 'angle) a)
-          (else error "Unknown op: MAKE-FROM-MAG-ANG")))
+          (else error "Unknown op: MAKE-FROM-MAG-ANG" op)))
   dispatch)
 ```

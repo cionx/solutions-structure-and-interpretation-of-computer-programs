@@ -25,19 +25,19 @@
 >
 > 4.  When Insatiable takes over a new company, what changes must be made in order to incorporate the new personnel information into the central system?
 
-
+---
 
 We assume that each division has the following:
 
-- A `division-file` holding the set of records for the division, in some unspecified data structure.
+- A `division-file` holding the set of records for the division, in some data structure.
 
-- A procedure `(division-get-record division-file ⟨name⟩)` that takes as arguments the record-file `division-file`, the `⟨name⟩` of an employee of the division, and that returns the employee’s record.
+- A procedure `(division-get-record division-file ⟨name⟩)` that takes as arguments the record-file `division-file`, the `⟨name⟩` of an employee of the division (as a symbol), and that returns the employee’s record.
   If no record could be found, then a failure-value `⟨division-record-failure⟩` is returned instead.
 
-- A procedure `(divison-get-value ⟨record⟩ ⟨attribute⟩)` that takes as arguments an employee record and an attribute whose value we want to find in the record (e.g., `'address` or `'salary`), and that returns the value of the specified attribute.
+- A procedure `(divison-get-value ⟨record⟩ ⟨attribute⟩)` that takes as arguments an employee record and an attribute (as a symbol) whose value we want to find in the record (e.g., `'address` or `'salary`), and that returns the value of the specified attribute.
   If the attribute could not be found in the record, then a failure-value `⟨division-attribute-failure⟩` is returned instead.
 
-- A `division-name`, which is represented as a symbol, and that uniquely identifies the division (e.g., `sales`, `development`, `human-resources`).
+- A `division-name`, which is represented as a symbol, and that uniquely identifies the division (e.g., `'sales`, `'development`, `'human-resources`).
 
 We then require each division to do the following:
 
