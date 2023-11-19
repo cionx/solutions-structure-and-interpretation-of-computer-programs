@@ -24,10 +24,12 @@
 
 
 
+
 ;;; 1.2.4 Exponentiation
 
 (define (even? n)
   (= (remainder n 2) 0))
+
 
 
 
@@ -73,11 +75,13 @@
 
 
 
+
 ;;; 1.3.1 Procedures as Arguments
 
 (define (identity x) x)
 
 (define (inc x) (+ x 1))
+
 
 
 
@@ -113,6 +117,7 @@
 
 
 
+
 ;;; 2.1.4 Extended Exercise: Interval Arithmetic
 
 (define (make-interval a b) (cons a b))
@@ -141,6 +146,7 @@
 
 (define (width i)
   (/ (- (upper-bound i) (lower-bound i)) 2))
+
 
 
 
@@ -181,6 +187,7 @@
   (list (car pair)
         (cadr pair)
         (+ (car pair) (cadr pair))))
+
 
 
 
@@ -235,6 +242,7 @@
 
 
 
+
 ;; 2.3.3 Sets; Sets as unordered lists
 ;; These procedures will be overwritten in a moment, and cannot be used via
 ;; loading of sicplib. We include these procedures only for completeness.
@@ -256,6 +264,7 @@
          (cons (car set1)
                (intersection-set (cdr set1) set2)))
         (else (intersection-set (cdr set1) set2))))
+
 
 
 
@@ -349,6 +358,7 @@
 
 
 
+
 ;;; Section 2.3.4; Huffman Encoding Trees
 
 (define (make-leaf symbol weight)
@@ -414,6 +424,7 @@
 
 
 
+
 ;;; 2.4.2 Tagged Data
 
 (define (attach-tag type-tag contents)
@@ -434,6 +445,7 @@
 
 (define (polar? z)
   (eq? (type-tag z) 'polar))
+
 
 
 
@@ -529,6 +541,8 @@
        (lambda (r a) (tag (make-from-mag-ang r a))))
   'done)
 
+;; The following definition of apply-generic will be overwritten/extended in
+;; the next subsection. We include this version only for completeness.
 (define (apply-generic op . args)
   (let ((type-tags (map type-tag args)))
     (let ((proc (get op type-tags)))
@@ -546,12 +560,15 @@
 
 
 
+
 ;;; Section 2.5: Systems with generic operations
 
 (define (add x y) (apply-generic 'add x y))
 (define (sub x y) (apply-generic 'sub x y))
 (define (mul x y) (apply-generic 'mul x y))
 (define (div x y) (apply-generic 'div x y))
+
+
 
 (define (install-scheme-number-package)
   (define (tag x)
@@ -575,6 +592,8 @@
 
 (define (make-scheme-number n)
   ((get 'make 'scheme-number) n))
+
+
 
 (define (install-rational-package)
   ;; internal procedures
@@ -618,6 +637,8 @@
 
 (define (make-rational n d)
   ((get 'make 'rational) n d))
+
+
 
 (define (install-complex-package)
   ;; imported procedures from rectangular and polar packages
@@ -666,10 +687,7 @@
 (define (make-complex-from-mag-ang r a)
   ((get 'make-from-mag-ang 'complex) r a))
 
-(put 'real-part '(complex) real-part)
-(put 'imag-part '(complex) imag-part)
-(put 'magnitude '(complex) magnitude)
-(put 'angle '(complex) angle)
+
 
 (install-scheme-number-package)
 (install-rational-package)
@@ -677,7 +695,18 @@
 (install-rectangular-package)
 (install-complex-package)
 
-;;; 2.5.2: Combining data of different types
+
+
+;; From Exercise 2.77
+(put 'real-part '(complex) real-part)
+(put 'imag-part '(complex) imag-part)
+(put 'magnitude '(complex) magnitude)
+(put 'angle '(complex) angle)
+
+
+
+
+;;; 2.5.2 Combining data of different types
 
 (define coercion-table (make-table))
 (define get-coercion (coercion-table 'lookup-proc))

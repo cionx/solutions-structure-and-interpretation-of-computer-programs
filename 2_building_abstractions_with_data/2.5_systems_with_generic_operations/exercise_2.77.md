@@ -15,7 +15,7 @@
 > In particular, how many times is `apply-generic` invoked?
 > What procedure is dispatched to in each case?
 
-
+---
 
 We have two kinds of “generic procedures”:
 
@@ -52,11 +52,11 @@ The procedure `magnitude` is implemented in terms of `apply-generic`:
 the expression `(magnitude z)` is evaluated to `(apply-generic 'magnitude z)`.
 The procedure `apply-generic` then looks up the procedure that is specified under the symbol `'magnitude` for the input signature `('complex)`.
 However, as noted above, the only procedures registered under `'magnitude` are those for the input signatures `('rectangular)` and `('polar)`.
-Consequently, `apply-generic` triggers an error, whiche reports to us that no suitable procedure could be found.
+Consequently, `apply-generic` triggers an error that reports to us that no suitable procedure could be found.
 
 To fix this problem, we need to register a procedure for `'magnitude` for the type `'complex`.
 That is, we need a procedure that computes the magnitude of `⟨content⟩` in `('complex ⟨content⟩)`.
-This `⟨content⟩` is either of type `'rectangular` or `'polar`, and the procedure `magnitude` can thankfully already deal with those types.
+This `⟨content⟩` is either of type `'rectangular` or `'polar`, and the generic procedure `magnitude` can thankfully already deal with those types.
 We hence add the following registration:
 ```scheme
 (put 'magnitude ('complex) magnitude)
@@ -68,7 +68,7 @@ With this new registration, Louis’s expression will be evaluated as follows:
 (apply-generic 'magnitude (cons 'complex (cons 'rectangular (cons 3 4))))
 
 ((get 'magnitude ('complex)) (cons 'rectangular (cons 3 4)))
-  ;; this is where the new registration is used
+  ;; here is where the new registration is used
 (magnitude (cons 'rectangular (cons 3 4)))
 
 (apply-generic 'magnitude (cons 'rectangular (cons 3 4)))
@@ -88,4 +88,4 @@ With this new registration, Louis’s expression will be evaluated as follows:
 5
 ```
 
-The same discussion holds true for the procedured `real-part`, `imag-part` and `angle` instead of `magnitude`.
+The same discussion holds true for the procedures `real-part`, `imag-part` and `angle` instead of `magnitude`.

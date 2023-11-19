@@ -4,9 +4,9 @@
 > You will need to devise a way to test which of two types is higher in the tower.
 > Do this in a manner that is “compatible” with the rest of the system and will not lead to problems in adding new levels to the tower.
 
+---
 
-
-We associate to each of the types `'integer`, `'rational`, `'real` and `'complex` a “level”, which is the height of this type in the tower of types.
+We assign to each of the types `'integer`, `'rational`, `'real` and `'complex` a “level”, which is the height of this type in the tower of types.
 We use a procedure `get-level` to determine the level of a number.
 For arguments that are not of these four types, the procedure returns `#f` instead.
 ```scheme
@@ -18,18 +18,18 @@ For arguments that are not of these four types, the procedure returns `#f` inste
           ((eq? type 'complex) 3)
           (else #f))))
 ```
-We could have also implemented `get-type` via a generic procedure via `apply-generic`.
-Our approach ensures that the level-values of all involved types are consistently chosen.
+We could have also implemented `get-type` as a generic procedure via `apply-generic`.
+Our approach gives a better overview over the different type levels.
 
 To (repeatedly) raise a number to a specified target level we use a procedure `raise-to-level`.
 If the specified target level is `#f`, then nothing happens.
 ```scheme
 (define (raise-to-level x target-level)
-  (define (iter y)
-    (if (< (get-level y) target-level)
-        (iter (raise y))
-        y))
-  (if target-level (iter x) #f))
+  (define (iter x)
+    (if (< (get-level x) target-level)
+        (iter (raise x))
+        x))
+  (if target-level (iter x) x))
 ```
 We will need to be able to determine the maximal level in a list of levels.
 If the list is empty, or if one of the levels is `#f`, then the result is `#f`.
@@ -71,24 +71,20 @@ Step 5 will then do the exact same thing as type 1.
 ```scheme
 (define (apply-generic op . args)
   (let ((type-tags (map type-tag args)))
-    (define (abort)
-      (error "No method for these types"
-             (list op type-tags)))
-    (let ((proc (get op type-tags)))
-      (if proc
-          (apply proc (map contents args))
+    (let ((proc-1 (get op type-tags)))
+      (if proc-1
+          (apply proc-1 (map contents args))
           (if (null? args)
-              (abort)
-              (let ((target-level
-                      (apply level-max (map get-level args))))
+              (error "No method for these types"
+                     (list op type-tags))
+              (let ((target-level (apply level-max (map get-level args))))
                 (let ((coerced-args
-                        (map (lambda (x)
-                               (raise-to-level x target-level))
-                             args)))
-                  (let ((coerced-type-tags
-                          (map type-tag coerced-args)))
-                    (let ((proc (get op coerced-type-tags)))
-                      (if proc
-                          (apply proc (map contents coerced-args))
-                          (abort)))))))))))
+                       (map (lambda (x) (raise-to-level x target-level))
+                            args)))
+                  (let ((coerced-type-tags (map type-tag coerced-args)))
+                    (let ((proc-2 (get op coerced-type-tags)))
+                      (if proc-2
+                          (apply proc-2 (map contents coerced-args))
+                          (error "No method for these types"
+                                 (list op type-tags))))))))))))
 ```

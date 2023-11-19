@@ -23,7 +23,7 @@ We add the following code to the `rational` package:
      (lambda (x) (= (numer x) 0)))
 ```
 
-For complex numbers we decided to implement different procedures for `'rectangular` and `'polar`.
+For complex numbers we decided to implement different procedures for the subtypes `'rectangular` and `'polar`.
 We add the following code to the `rectangular` package:
 ```scheme
 (put 'zero? '(rectangular)

@@ -1,5 +1,7 @@
 (load "../../sicplib.scm")
 
+
+
 (define (equ? x y) (apply-generic 'equ? x y)) ; new code
 
 (define (install-scheme-number-package)

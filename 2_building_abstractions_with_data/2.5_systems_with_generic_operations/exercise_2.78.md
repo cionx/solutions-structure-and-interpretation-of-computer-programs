@@ -7,7 +7,7 @@
 > Modify the definitions of `type-tag`, `contents`, and `attach-tag` from Section 2.4.2 so that our generic system takes advantage of Scheme’s internal type system.
 > That is to say, the system should work as before except that ordinary numbers should be represented simply as Scheme numbers rather than as pairs whose `car` is the symbol `scheme-number`.
 
-
+---
 
 First, we make sure that the procedure `attach-tag` does not add the label `'scheme-number` in front of any number:
 ```scheme

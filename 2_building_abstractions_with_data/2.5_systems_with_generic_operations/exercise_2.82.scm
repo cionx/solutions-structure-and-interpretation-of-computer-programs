@@ -1,24 +1,31 @@
 (load "../../sicplib.scm")
 
+(define (get-common-coercions input-types target)
+  (if (null? input-types)
+      '()
+      (let ((head (car input-types))
+            (tail (cdr input-types)))
+        (let ((head->target
+                (if (eq? head target)
+                    identity
+                    (get-coercion head target)))
+              (tail->target
+                (get-common-coercions tail target)))
+          (if (and head->target tail->target)
+              (cons head->target tail->target)
+              #f)))))
+
+;; Both lists need to have the same length.
+(define (zip-apply procs args)
+  (if (null? procs)
+      '()
+      (cons ((car procs) (car args))
+            (zip-apply (cdr procs) (cdr args)))))
 
 (define (apply-generic op . args)
-  (define (get-common-coercions arg-types target-type)
-    (if (null? arg-types)
-        '()
-        (let ((head (car arg-types))
-              (tail (cdr arg-types)))
-          (let ((head->target-type
-                  (if (eq? head target-type)
-                      identity
-                      (get-coercion head target-type)))
-                (tail->target-type
-                  (get-common-coercions tail target-type)))
-            (if (and head->target-type tail->target-type)
-                (cons head->target-type tail->target-type)
-                #f)))))
   (define (iter target-types)
     (if (null? target-types)
-        (error "No method for these types")
+        (error "No procedure for these types")
         (let ((target-type (car target-types))
               (other-types (cdr target-types))
               (arg-types (map type-tag args)))
@@ -31,26 +38,8 @@
                           (apply proc (map contents coerced-args))
                           (iter other-types)))))
                 (iter other-types))))))
-  (iter (map type-tag args)))
-
-;; Both lists need to have the same length.
-(define (zip-apply function-list value-list)
-  (if (null? function-list)
-      '()
-      (cons ((car function-list) (car value-list))
-            (zip-apply (cdr function-list) (cdr value-list)))))
-
-;;; TESTING
-
-(put-coercion 'test1 'test2 (lambda (x) (attach-tag 'test2 (contents x))))
-(put-coercion 'test1 'test3 (lambda (x) (attach-tag 'test3 (contents x))))
-(put-coercion 'test2 'test3 (lambda (x) (attach-tag 'test3 (contents x))))
-
-(define (sum-3 x y z) (+ x y z))
-(put 'sum '(test3 test3 test3) sum-3)
-
-(define x (attach-tag 'test1 1))
-(define y (attach-tag 'test2 2))
-(define z (attach-tag 'test3 3))
-
-(apply-generic 'sum x y z)
+  (let ((type-tags (map type-tag args)))
+    (let ((proc (get op type-tags)))
+      (if proc
+          (apply proc (map contents args))
+          (iter type-tags)))))

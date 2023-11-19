@@ -1,4 +1,4 @@
-(load "exercise_2.83.scm") ; also loads sicplib
+(load "exercise_2.83.scm") ; for `raise`, also loads sicplib
 
 (define (get-level x)
   (let ((type (type-tag x)))
@@ -8,13 +8,12 @@
           ((eq? type 'complex) 3)
           (else #f))))
 
-
 (define (raise-to-level x target-level)
-  (define (iter y)
-    (if (< (get-level y) target-level)
-        (iter (raise y))
-        y))
-  (if target-level (iter x) #f))
+  (define (iter x)
+    (if (< (get-level x) target-level)
+        (iter (raise x))
+        x))
+  (if target-level (iter x) x))
 
 (define (level-max . level-list)
   (define (binary-level-max level1 level2)
@@ -32,23 +31,19 @@
 
 (define (apply-generic op . args)
   (let ((type-tags (map type-tag args)))
-    (define (abort)
-      (error "No method for these types"
-             (list op type-tags)))
-    (let ((proc (get op type-tags)))
-      (if proc
-          (apply proc (map contents args))
+    (let ((proc-1 (get op type-tags)))
+      (if proc-1
+          (apply proc-1 (map contents args))
           (if (null? args)
-              (abort)
-              (let ((target-level
-                      (apply level-max (map get-level args))))
+              (error "No method for these types"
+                     (list op type-tags))
+              (let ((target-level (apply level-max (map get-level args))))
                 (let ((coerced-args
-                        (map (lambda (x)
-                               (raise-to-level x target-level))
-                             args)))
-                  (let ((coerced-type-tags
-                          (map type-tag coerced-args)))
-                    (let ((proc (get op coerced-type-tags)))
-                      (if proc
-                          (apply proc (map contents coerced-args))
-                          (abort)))))))))))
+                       (map (lambda (x) (raise-to-level x target-level))
+                            args)))
+                  (let ((coerced-type-tags (map type-tag coerced-args)))
+                    (let ((proc-2 (get op coerced-type-tags)))
+                      (if proc-2
+                          (apply proc-2 (map contents coerced-args))
+                          (error "No method for these types"
+                                 (list op type-tags))))))))))))

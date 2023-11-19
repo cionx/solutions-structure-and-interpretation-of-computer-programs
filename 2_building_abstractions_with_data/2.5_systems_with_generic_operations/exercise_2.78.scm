@@ -1,10 +1,6 @@
-;;; Dependencies
-
 (load "../../sicplib")
 
 
-
-;;; Code
 
 (define (attach-tag type-tag contents)
   (if (and (eq? type-tag 'scheme-number)
@@ -21,9 +17,3 @@
   (cond ((number? datum) datum)
         ((pair? datum) (cdr datum))
         (else (error "Bad tagged datum: CONTENTS" datum))))
-
-
-
-;;; For testing
-
-(install-scheme-number-package)

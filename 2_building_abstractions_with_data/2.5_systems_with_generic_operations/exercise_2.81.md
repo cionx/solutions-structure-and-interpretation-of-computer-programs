@@ -29,6 +29,8 @@
 >
 > 3.  Modify `apply-generic` so that it doesn’t try coercion if the two arguments have the same type.
 
+---
+
 
 
 ### The problem
@@ -37,18 +39,18 @@ The current implementation of `apply-generic` will get caught in an endless loop
 
 Say that we have two values `x` and `y` of the same type `t`, for which a coercion procedure from `t` to itself is registered (e.g., the identity procedure `(lambda (x) x)`).
 Suppose further that for some symbol `'op` there is no procedure registered for `'op` and for the input signature `(t t)`.
-That is, `(get 'op (list t t))` evaluates to `false` instead of a procedure.
+That is, `(get 'op (list t t))` evaluates to `#f` instead of a procedure.
 
 When we try to evaluate `(apply-generic 'op x y)`, the following will happen:
 
-1.  First, `(get 'op (list t t)` will be evaluated, resulting in `false`.
+1.  First, `(get 'op (list t t)` will be evaluated, resulting in `#f`.
     This tells the interpreter that no procedure is available for `'op` with respect to inputs of type `t` and `t` respectively.
 
-2.  To possibly circumvent this problem we consider the coercion procedures `t1->t2`and `t2->t1` determined via `(get-coercion t t)` and `(get-coercion t t)`.
-    (Both `t1->t2` and `t2->t1` are the same procedure, but we won’t need this.)
+2.  To possibly circumvent this problem we consider the coercion procedures `t1->t2` and `t2->t1`, both determined via `(get-coercion t t)` and `(get-coercion t t)`.
+    (Both `t1->t2` and `t2->t1` are the same procedure, but this won’t matter.)
     As assumed above, this coercion procedure exists.
 
-3.  As `t1->t2` is an actual procedure, and not `false`, we now try to evaluate `(apply-generic 'op (t1->t2 x) y)`.
+3.  As `t1->t2` is an actual procedure, and not `#f`, we now try to evaluate `(apply-generic 'op (t1->t2 x) y)`.
 
 However, `(t1->t2 x)` is again of type `t`.
 So in terms of types we are back to step 1, and are now trapped in a loop.
@@ -66,7 +68,7 @@ We have (at least) three possible solutions:
 3.  Don’t let `apply-generic` coerce a type into itself.
     In our case of only two input arguments, this means that coercion must not be used if both arguments have the same type.
 
-The first solution is highly impractical, and basically impossible to actually abide by.
+The first solution is highly impractical.
 
 The second solution is probably the most elegant and robust one.
 It stops you from shooting yourself in the foot by not letting you aim at your feet.

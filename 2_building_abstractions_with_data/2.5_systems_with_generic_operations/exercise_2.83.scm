@@ -1,10 +1,11 @@
 (load "../../sicplib.scm")
 
+
+
 ;;; Integers
 
 (define (install-integer-package)
-  (define (tag x)
-    (attach-tag 'integer x))
+  (define (tag x) (attach-tag 'integer x))
   (put 'add '(integer integer) (lambda (x y) (tag (add x y))))
   (put 'sub '(integer integer) (lambda (x y) (tag (sub x y))))
   (put 'mul '(integer integer) (lambda (x y) (tag (mul x y))))
@@ -17,11 +18,12 @@
 (define (make-integer n)
   ((get 'make 'integer) n))
 
+
+
 ;;; Reals
 
 (define (install-real-package)
-  (define (tag x)
-    (attach-tag 'real x))
+  (define (tag x) (attach-tag 'real x))
   (put 'add '(real real) (lambda (x y) (tag (add x y))))
   (put 'sub '(real real) (lambda (x y) (tag (sub x y))))
   (put 'mul '(real real) (lambda (x y) (tag (mul x y))))
@@ -31,6 +33,8 @@
 
 (define (make-real x)
   ((get 'make 'real) x))
+
+
 
 ;;; Rationals (extension)
 
@@ -69,12 +73,15 @@
   (put 'div
        '(rational rational)
        (lambda (x y) (tag (div-rat x y))))
-  (put 'numer '(rational) numer) ; added line
-  (put 'denom '(rational) denom) ; added line
+  (put 'numer '(rational) numer)          ; added line
+  (put 'denom '(rational) denom)          ; added line
   (put 'make
        'rational
        (lambda (n d) (tag (make-rat n d))))
   'done)
+
+(define (numer x) (apply-generic 'numer x))
+(define (denom x) (apply-generic 'denom x))
 
 
 
@@ -109,18 +116,3 @@
 
 (define (raise x)
   (apply-generic 'raise x))
-
-;;; Testing
-
-(install-rational-package)
-(define (denom x) (apply-generic 'denom x))
-(define (numer x) (apply-generic 'numer x))
-
-(install-integer-package)
-(install-real-package)
-(install-coercions)
-
-(define x1 (make-integer 5))
-(define x2 ((get-coercion 'integer 'rational) x1))
-(define x3 ((get-coercion 'rational 'real) x2))
-(define x4 ((get-coercion 'real 'complex) x3))

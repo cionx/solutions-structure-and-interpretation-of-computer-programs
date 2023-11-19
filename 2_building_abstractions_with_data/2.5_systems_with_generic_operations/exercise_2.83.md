@@ -13,8 +13,7 @@ For this exercise we introduce two additional types, `'integer` and `'real`.
 We implement `'real` as `'scheme-number` plus an additional type-tag:
 ```scheme
 (define (install-real-package)
-  (define (tag x)
-    (attach-tag 'real x))
+  (define (tag x) (attach-tag 'real x))
   (put 'add '(real real) (lambda (x y) (tag (add x y))))
   (put 'sub '(real real) (lambda (x y) (tag (sub x y))))
   (put 'mul '(real real) (lambda (x y) (tag (mul x y))))
@@ -27,13 +26,12 @@ We implement `'real` as `'scheme-number` plus an additional type-tag:
 ```
 Note that in the definition of arithmetic operations for `'real`, the parameters `x` and `y` will already have their `'real` label torn off by `apply-generic`.
 This means that `x` and `y` will be tagged as `'scheme-number`.
-This allows us to use the procedures `add`, `sub`, etc.
+This allows us to use the generic procedures `add`, `sub`, `mul` and `div`.
 
-We implement `'integer` similarly, but use Scheme’s `integer?` predicate to ensure that we are actually dealing with an integer.
+We implement `'integer` similarly, but use Scheme’s `integer?` predicate in the constructor to ensure that we are actually dealing with an integer.
 ```scheme
 (define (install-integer-package)
-  (define (tag x)
-    (attach-tag 'integer x))
+  (define (tag x) (attach-tag 'integer x))
   (put 'add '(integer integer) (lambda (x y) (tag (add x y))))
   (put 'sub '(integer integer) (lambda (x y) (tag (sub x y))))
   (put 'mul '(integer integer) (lambda (x y) (tag (mul x y))))
@@ -61,11 +59,8 @@ We extend the rational package by making the procedures `denom` and `numer` publ
   ⋮
   'done)
 
-⋮
-
-(install-rational-package)
-(define (denom x) (apply-generic 'denom x))
 (define (numer x) (apply-generic 'numer x))
+(define (denom x) (apply-generic 'denom x))
 ```
 
 
@@ -89,7 +84,7 @@ The same goes for the coercion procedure from `'real` to `'complex`.
   (scheme-number->complex (contents x)))
 ```
 
-To convert a `'rational` number into a `'real` number we are using the public procedures `denom` and `numer` that we defined above.
+To convert a `'rational` number into a `'real` number we are using the newly-introduced public procedures `denom` and `numer` that we defined above.
 ```scheme
 (define (rational->real x)
     (make-real (/ (numer x) (denom x))))
@@ -118,8 +113,8 @@ Intuitively speaking, we are going to implement the generic `raise` procedure vi
 However, this code doesn’t work as intended.
 The problem is that `apply-generic` removes the type-tags of the arguments `x`, whereas coercion procedures require this label to be in place.
 
-We have so far not found a good solution this problem.
-For now, we are using the hack of re-attaching the type label before applying the coercion procedure:
+We have not found a good solution to this problem.
+We are currently using the dirty hack of re-attaching the type label before applying the coercion procedure:
 ```scheme
 (put 'raise
      '(integer)
