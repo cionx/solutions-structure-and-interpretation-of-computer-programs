@@ -706,6 +706,7 @@
 
 
 
+
 ;;; 2.5.2 Combining data of different types
 
 (define coercion-table (make-table))
